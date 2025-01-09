@@ -1,6 +1,7 @@
 import CustomButton from "@/components/CustomButton";
 import InputField from "@/components/InputField";
 import { icons, images } from "@/constants";
+import { router } from "expo-router";
 import { useState } from "react";
 import { Image, ScrollView, Text, View } from "react-native";
 
@@ -24,8 +25,8 @@ const SignUp = () => {
     setForm({ ...form, password: "" });
   };
 
-  const onSignUpPress = async () => {
-    return;
+  const onSignUpPress = () => {
+    router.push("/(root)/(tabs)/home");
   };
   return (
     <ScrollView className="flex-1 bg-white" keyboardShouldPersistTaps="always">
