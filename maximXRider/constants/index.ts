@@ -21,6 +21,10 @@ import flag from "@/assets/icons/flag.png";
 import schedule from "@/assets/icons/schedule.png";
 import cash from "@/assets/icons/cash.png";
 import tune from "@/assets/icons/tune.png";
+import arrowBack from "@/assets/icons/arrow_back.png";
+import mic from "@/assets/icons/mic.png";
+import profile from "@/assets/icons/profile.png";
+import check from "@/assets/icons/check.png"
 
 export const images = {
   maximLogo,
@@ -49,6 +53,10 @@ export const icons = {
   schedule,
   tune,
   cash,
+  arrowBack,
+  mic,
+  profile,
+  check,
 };
 
 export const menuItems: { id: number; title: string; icon: any }[] = [

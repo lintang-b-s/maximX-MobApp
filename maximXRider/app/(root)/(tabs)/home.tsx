@@ -1,6 +1,7 @@
 import CustomButton from "@/components/CustomButton";
 import { icons, images, menuItems } from "@/constants";
-import { useState } from "react";
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
 import {
   Image,
   ScrollView,
@@ -10,9 +11,67 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useLocationStore } from "@/store";
+import * as Location from "expo-location";
 
 export default function Home() {
+  const {
+    setUserLocation,
+    setSourceLocation,
+    userAddress,
+    userLatitude,
+    userLongitude,
+    sourceAddress,
+    sourceLocationName,
+    destinationAddress,
+    destinationLocationName,
+  } = useLocationStore();
+
   const [selectedMenu, selectSelectedMenu] = useState("");
+
+  const handlePickUpLocationPress = () => {
+    router.push("/(root)/choose-pickup-location");
+  };
+
+  const handleDestinationLocationPress = () => {
+    router.push("/(root)/choose-destination-location");
+  };
+
+  useEffect(() => {
+    const requestLocation = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+
+      if (status != "granted") {
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync();
+
+      const address = await Location.reverseGeocodeAsync({
+        latitude: location.coords?.latitude!,
+        longitude: location.coords?.longitude!,
+      });
+
+      setUserLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        address: `${address[0].formattedAddress!.split(",").slice(1, 3).join(", ")}`,
+      });
+    };
+
+    requestLocation();
+  }, []);
+
+  useEffect(() => {
+    if (!sourceAddress && !sourceLocationName && userAddress) {
+      setSourceLocation({
+        latitude: userLatitude!,
+        longitude: userLongitude!,
+        locationName: userAddress,
+        address: userAddress,
+      });
+    }
+  }, [userAddress, sourceAddress, sourceLocationName]);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -26,50 +85,62 @@ export default function Home() {
 
           <View className="mt-12">
             <Text className="font-Roboto text-lg text-general-900">
-              Surakarta
+              {userAddress}
             </Text>
           </View>
         </View>
 
         <View className="flex w-full h-56  border-b justify-start items-center border-b-general-600 gap-2">
-          <View className="flex justify-start w-96 h-36 items-center bg-general-600 rounded-xl py-2 px-6 ">
-            <View className="flex flex-row items-center justify-between w-full   ">
-              <Image source={icons.circle} className="mr-5 h-8 w-8" />
+          <TouchableOpacity onPress={handlePickUpLocationPress}>
+            <View className="flex justify-start w-96 h-36 items-center bg-general-600 rounded-xl py-2 px-6 ">
+              <View className="flex flex-row items-center justify-start w-96 px-6  gap-2">
+                <Image source={icons.circle} className="mr-5 h-8 w-8" />
 
-              <View className="flex justify-center items-start ">
-                <Text className="text-general-900 font-Roboto text-base">
-                  Pick-Up Location
-                </Text>
+                <View className="flex justify-start items-start ">
+                  <Text className="text-general-900 font-Roboto text-base">
+                    Pick-Up Location
+                  </Text>
 
-                <Text className="text-secondary-900 font-Roboto text-xl ">
-                  Ruang Display
-                </Text>
+                  <Text className="text-secondary-900 font-Roboto text-lg ">
+                    {sourceLocationName}
+                  </Text>
 
-                <Text className="text-secondary-400 font-Roboto text-base ">
-                  Jalan Cermai
-                </Text>
+                  <Text className="text-secondary-400 font-Roboto text-base ">
+                    {sourceAddress}
+                  </Text>
+                </View>
+
+                <Image
+                  source={icons.forwardArrow}
+                  className="w-8 h-8 absolute left-[290px]"
+                />
               </View>
 
-              <Image source={icons.forwardArrow} className="w-8 h-8 ml-28" />
+              <View className="flex  flex-row px-6 justify-start items-center w-72 p-1 rounded-xl mt-2  ml-12 bg-white">
+                <Text className="font-Roboto text-secondary-400">
+                  Pick-up point
+                </Text>
+              </View>
             </View>
+          </TouchableOpacity>
 
-            <View className="flex  flex-row px-6 justify-start items-center w-72 p-1 rounded-xl mt-2  ml-12 bg-white">
-              <Text className="font-Roboto text-secondary-400">
-                Pick-up point
+          <TouchableOpacity onPress={handleDestinationLocationPress}>
+            <View className="flex flex-row  justify-start  w-96 h-14 items-center bg-general-600 rounded-xl py-4 px-6 gap-4 ">
+              <View className="rounded-full h-8 w-8 items-center justify-center bg-general-900 ">
+                <Image source={icons.flag} className="w-6 h-6" />
+              </View>
+              <Text className="text-base text-general-900 font-Roboto  ">
+                {destinationLocationName
+                  ? destinationLocationName
+                  : "Destination"}
               </Text>
-            </View>
-          </View>
 
-          <View className="flex flex-row  justify-between  w-96 h-14 items-center bg-general-600 rounded-xl py-4 px-6 gap-2 ">
-            <View className="rounded-full h-8 w-8 items-center justify-center bg-general-900">
-              <Image source={icons.flag} className="w-6 h-6" />
+              <Image
+                source={icons.forwardArrow}
+                className="w-8 h-8 absolute left-[290px]"
+              />
             </View>
-            <Text className="text-base text-general-900 font-Roboto  ">
-              Destination
-            </Text>
-
-            <Image source={icons.forwardArrow} className="w-8 h-8 ml-[130px]" />
-          </View>
+          </TouchableOpacity>
         </View>
 
         <View className="flex w-full h-10 justify-start items-center "></View>
@@ -111,7 +182,10 @@ export default function Home() {
             showsHorizontalScrollIndicator={false}
           >
             {menuItems.map((item) => (
-              <TouchableOpacity onPress={() => selectSelectedMenu(item.title)}>
+              <TouchableOpacity
+                key={item.id}
+                onPress={() => selectSelectedMenu(item.title)}
+              >
                 <View
                   className={`rounded-2xl bg-white m-2  border border-b-2 border-slate-200 p-8 ${item.title === selectedMenu ? "border-general-700 border-4" : ""}`}
                 >
@@ -124,7 +198,7 @@ export default function Home() {
             ))}
           </ScrollView>
 
-          <CustomButton title="ORDER"  />
+          <CustomButton title="ORDER" />
         </View>
       </View>
     </SafeAreaView>

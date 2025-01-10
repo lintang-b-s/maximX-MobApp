@@ -4,13 +4,41 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
 ## Get started
 
-1. Install dependencies
+1. Nyalain dulu openstreetmap tile servernya
+
+   ```bash
+
+    docker run -it --rm -v $(pwd)/osm:/data ghcr.io/systemed/tilemaker:master /data/java-latest.osm.pbf --output /data/java-latest.pmtiles
+
+   ```
+
+   server pmtiles
+
+   ```bash
+      mkdir martin
+      cd martin
+
+      # Download some sample data
+      curl -L -O https://github.com/maplibre/martin/raw/main/tests/fixtures/mbtiles/world_cities.mbtiles
+
+      # Download the latest version of Martin binary, extract it, and make it executable
+      curl -L -O https://github.com/maplibre/martin/releases/latest/download/martin-x86_64-unknown-linux-gnu.tar.gz
+      tar -xzf martin-x86_64-unknown-linux-gnu.tar.gz
+      chmod +x ./martin
+
+      # Show Martin help screen
+      ./martin --help
+
+      ./martin ../osm/java-latest.pmtiles
+   ```
+
+2. Install dependencies
 
    ```bash
    npm install
    ```
 
-2. Start the app
+3. Start the app
 
    ```bash
     npx expo start

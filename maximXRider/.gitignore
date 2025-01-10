@@ -38,3 +38,7 @@ yarn-error.*
 app-example
 
 coba/
+
+*osm.pbf
+osm/
+martin/
