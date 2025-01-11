@@ -33,7 +33,7 @@ const ChooseLocationLayout = ({
   }) => void;
 }) => {
   return (
-    <GestureHandlerRootView>
+    <GestureHandlerRootView className="flex-1">
       <View className="flex-1 bg-white">
         <View className="flex h-screen justify-between ">
           <Search />

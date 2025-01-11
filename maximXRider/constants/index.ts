@@ -26,11 +26,17 @@ import mic from "@/assets/icons/mic.png";
 import profile from "@/assets/icons/profile.png";
 import check from "@/assets/icons/check.png";
 import location from "@/assets/icons/location.png";
+import driver from "@/assets/images/driver.jpg";
+import eclipse from "@/assets/icons/eclipse.png";
+import ojek from "@/assets/icons/ojek.png";
+import mapSource from "@/assets/icons/map_source.png";
+import mapDest from "@/assets/icons/map_dest.png";
 
 export const images = {
   maximLogo,
   indonesianFlag,
   maximBig,
+  driver,
 };
 
 export const icons = {
@@ -59,6 +65,10 @@ export const icons = {
   profile,
   check,
   location,
+  eclipse,
+  ojek,
+  mapSource,
+  mapDest,
 };
 
 export const menuItems: { id: number; title: string; icon: any }[] = [

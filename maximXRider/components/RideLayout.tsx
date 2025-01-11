@@ -17,7 +17,7 @@ import { OSMMapProps } from "@/types/type";
 import MapLibre from "./MapLibre";
 import { useRef } from "react";
 
-const ChooseLocationLayout = ({
+const RideLayout = ({
   children,
   location: { latitude, longitude, showEarlyMarker },
 }: {
@@ -27,7 +27,7 @@ const ChooseLocationLayout = ({
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   return (
-    <GestureHandlerRootView>
+    <GestureHandlerRootView className="flex-1">
       <View className="flex-1 bg-white">
         <View className="flex h-screen  ">
           <View className="flex flex-row absolute z-10 top-16 items-center justify-start px-5">
@@ -53,7 +53,7 @@ const ChooseLocationLayout = ({
         <BottomSheet
           keyboardBehavior="extend"
           ref={bottomSheetRef}
-          snapPoints={["20%", "50%"]}
+          snapPoints={["55%", "80%"]}
           index={0}
         >
           <BottomSheetView
@@ -70,4 +70,4 @@ const ChooseLocationLayout = ({
   );
 };
 
-export default ChooseLocationLayout;
+export default RideLayout;

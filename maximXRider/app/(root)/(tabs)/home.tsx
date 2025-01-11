@@ -79,6 +79,10 @@ export default function Home() {
     }
   }, [userAddress, sourceAddress, sourceLocationName]);
 
+  const handleOrderPress = () => {
+    router.push("/(root)/ride");
+  }
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex flex-row items-start justify-between px-6">
@@ -205,7 +209,7 @@ export default function Home() {
             ))}
           </ScrollView>
 
-          <CustomButton title="ORDER" />
+          <CustomButton title="ORDER" onPress={handleOrderPress} />
         </View>
       </View>
     </SafeAreaView>

@@ -12,6 +12,13 @@ export default function Layout() {
         name="choose-destination-location"
         options={{ headerShown: false }}
       />
+
+      <Stack.Screen name="ride" options={{ headerShown: false }} />
+
+      <Stack.Screen
+        name="order-summary"
+        options={{ headerShown: false }}
+      />
     </Stack>
   );
 }

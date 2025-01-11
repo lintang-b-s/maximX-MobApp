@@ -83,3 +83,9 @@ declare interface ChooseLocationProps {
   locationName: string;
   locationAddress: string;
 }
+
+declare interface StarRatingProps {
+  defaultRating: number;
+  setDefaultRating: React.Dispatch<React.SetStateAction<number>>;
+  className: string;
+}
