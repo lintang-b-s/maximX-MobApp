@@ -72,11 +72,10 @@ declare interface LocationStore {
   }) => void;
 }
 
-declare interface UserMarkerData {
+declare interface OSMMapProps {
   latitude: number;
   longitude: number;
-  name: string;
-  profile_image: string;
+  showEarlyMarker: boolean;
 }
 
 declare interface ChooseLocationProps {

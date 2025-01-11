@@ -24,7 +24,8 @@ import tune from "@/assets/icons/tune.png";
 import arrowBack from "@/assets/icons/arrow_back.png";
 import mic from "@/assets/icons/mic.png";
 import profile from "@/assets/icons/profile.png";
-import check from "@/assets/icons/check.png"
+import check from "@/assets/icons/check.png";
+import location from "@/assets/icons/location.png";
 
 export const images = {
   maximLogo,
@@ -57,6 +58,7 @@ export const icons = {
   mic,
   profile,
   check,
+  location,
 };
 
 export const menuItems: { id: number; title: string; icon: any }[] = [

@@ -14,6 +14,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocationStore } from "@/store";
 import * as Location from "expo-location";
 
+function truncateText(text: string, maxLength: number = 34): string {
+  return text.length > maxLength ? `${text.slice(0, maxLength)}....` : text;
+}
+
 export default function Home() {
   const {
     setUserLocation,
@@ -42,10 +46,12 @@ export default function Home() {
       let { status } = await Location.requestForegroundPermissionsAsync();
 
       if (status != "granted") {
+        console.log("Permission to access location was denied");
         return;
       }
 
       let location = await Location.getCurrentPositionAsync();
+      // let location =  Location.getCurrentPositio();
 
       const address = await Location.reverseGeocodeAsync({
         latitude: location.coords?.latitude!,
@@ -75,22 +81,21 @@ export default function Home() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="flex flex-col h-screen">
-        <View className="flex flex-row items-start justify-between px-6">
-          <Image
-            className="w-[100px] h-[100px]"
-            source={images.maximBig}
-            resizeMode="contain"
-          />
+      <View className="flex flex-row items-start justify-between px-6">
+        <Image
+          className="w-[100px] h-[100px]"
+          source={images.maximBig}
+          resizeMode="contain"
+        />
 
-          <View className="mt-12">
-            <Text className="font-Roboto text-lg text-general-900">
-              {userAddress}
-            </Text>
-          </View>
+        <View className="mt-12">
+          <Text className="font-Roboto text-lg text-general-900">
+            {userAddress}
+          </Text>
         </View>
-
-        <View className="flex w-full h-56  border-b justify-start items-center border-b-general-600 gap-2">
+      </View>
+      <View className="flex flex-col h-screen gap-[14%]">
+        <View className="flex w-full h-1/4   border-b-4   justify-start items-center border-b-general-600 gap-2">
           <TouchableOpacity onPress={handlePickUpLocationPress}>
             <View className="flex justify-start w-96 h-36 items-center bg-general-600 rounded-xl py-2 px-6 ">
               <View className="flex flex-row items-center justify-start w-96 px-6  gap-2">
@@ -102,11 +107,15 @@ export default function Home() {
                   </Text>
 
                   <Text className="text-secondary-900 font-Roboto text-lg ">
-                    {sourceLocationName}
+                    {sourceLocationName
+                      ? truncateText(sourceLocationName!, 34)
+                      : "source address"}
                   </Text>
 
                   <Text className="text-secondary-400 font-Roboto text-base ">
-                    {sourceAddress}
+                    {sourceAddress
+                      ? truncateText(sourceAddress!, 34)
+                      : "source address"}
                   </Text>
                 </View>
 
@@ -131,7 +140,7 @@ export default function Home() {
               </View>
               <Text className="text-base text-general-900 font-Roboto  ">
                 {destinationLocationName
-                  ? destinationLocationName
+                  ? truncateText(destinationLocationName, 34)
                   : "Destination"}
               </Text>
 
@@ -143,12 +152,10 @@ export default function Home() {
           </TouchableOpacity>
         </View>
 
-        <View className="flex w-full h-10 justify-start items-center "></View>
-
         {/* section details & order */}
         <View
-          className="flex w-full  justify-between gap-2 border-t-4 border-r-4 border-l-4 border-t-general-600 border-r-general-600 border-l-general-600 rounded-t-3xl   
-         items-center p-4"
+          className="flex w-full justify-between gap-2 border-t-4 border-r-4 border-l-4 border-t-general-600 border-r-general-600 border-l-general-600 rounded-t-3xl   
+         items-center px-4 py-6 "
         >
           <View className="flex flex-row justify-start w-96 h-16 items-center bg-general-600 rounded-xl py-4 px-6 gap-2 ">
             <Image source={icons.tune} className="w-6 h-6" />
@@ -187,7 +194,7 @@ export default function Home() {
                 onPress={() => selectSelectedMenu(item.title)}
               >
                 <View
-                  className={`rounded-2xl bg-white m-2  border border-b-2 border-slate-200 p-8 ${item.title === selectedMenu ? "border-general-700 border-4" : ""}`}
+                  className={`rounded-2xl bg-white m-2  border border-b-2 border-slate-200 p-8 ${item.title === selectedMenu ? "border-general-340 border-4" : ""}`}
                 >
                   <Image source={item.icon} className="h-12 w-12" />
                   <Text className="mt-4 font-RobotoSemiBold text-base text-secondary-900">

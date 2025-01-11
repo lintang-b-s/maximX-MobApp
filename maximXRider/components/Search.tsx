@@ -21,7 +21,7 @@ const Search = () => {
 
   return (
     <View
-      className="flex flex-row absolute z-10 top-6 py-2 justify-between
+      className="flex flex-row absolute z-10 top-6 py-4 justify-between
            items-center px-6 bg-white rounded-3xl left-2 right-2 mx-2 "
     >
       <TouchableOpacity onPress={() => router.back()}>
