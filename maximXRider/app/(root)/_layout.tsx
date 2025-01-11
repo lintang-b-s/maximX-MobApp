@@ -1,4 +1,5 @@
 import { Stack } from "expo-router";
+import Header from "@/components/Header";
 
 export default function Layout() {
   return (
@@ -17,7 +18,15 @@ export default function Layout() {
 
       <Stack.Screen
         name="order-summary"
-        options={{ headerShown: false }}
+        options={{
+          headerTitle: () => <Header title="Order summary" />,
+        }}
+      />
+      <Stack.Screen
+        name="order-detail"
+        options={{
+          headerTitle: () => <Header title="Order details" />,
+        }}
       />
     </Stack>
   );

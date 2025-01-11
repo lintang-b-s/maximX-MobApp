@@ -11,21 +11,7 @@ const OrderSummary = () => {
   const [driverRating, setDriverRating] = useState<number>(2);
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="px-5">
-        <View className="flex flex-row   items-center gap-6  px-5 my-8">
-          <TouchableOpacity onPress={() => router.push("/home")}>
-            <View className="w-10 h-10 items-center justify-center">
-              <Image
-                source={icons.arrowBack}
-                resizeMode="contain"
-                className="w-6 h-6"
-              />
-            </View>
-          </TouchableOpacity>
-
-          <Text className="font-RobotoBold text-xl">Order Summary</Text>
-        </View>
-
+      <ScrollView className="px-5 py-4">
         {/* order id & order status */}
         <View className="flex flex-row justify-between items-center w-full">
           <View className="flex flex-row items-center gap-2">

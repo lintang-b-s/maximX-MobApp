@@ -117,7 +117,7 @@ const Ride = () => {
               Pembayaran
             </Text>
             <Text className="font-RobotoBold text-base text-secondary-600">
-              Saldo MaximPay: 082 146 022 211
+              Saldo Gopay: 082 146 022 211
             </Text>
           </View>
           <Text className="font-RobotoLight text-xl text-secondary-700 mt-4">

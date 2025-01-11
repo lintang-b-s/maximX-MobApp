@@ -89,3 +89,28 @@ declare interface StarRatingProps {
   setDefaultRating: React.Dispatch<React.SetStateAction<number>>;
   className: string;
 }
+
+declare interface HeaderProps {
+  title: string;
+}
+
+declare interface OrderDetail {
+  isTip: boolean;
+  tipValue: number;
+  differentPhoneNumber: string;
+  additionalInformation: string;
+  setTip: () => void;
+  setTipValue: ({ tip }: { tip: number }) => void;
+  setDifferentPhone: ({ phone }: { phone: string }) => void;
+  setAdditionalInformation: ({ info }: { info: string }) => void;
+}
+
+declare interface RideProps {
+  source: string;
+  destination: string;
+  sourceLatLng: number[];
+  destinationLatLng: number[];
+  rideDate: Date;
+  rideCompleteDate: Date;
+  status: RideStatus;
+}

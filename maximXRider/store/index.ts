@@ -1,4 +1,4 @@
-import { LocationStore } from "@/types/type";
+import { LocationStore, OrderDetail } from "@/types/type";
 
 import { create } from "zustand";
 
@@ -64,6 +64,31 @@ export const useLocationStore = create<LocationStore>()((set) => ({
       destinationLongitude: longitude,
       destinationLocationName: locationName,
       destinationAddress: address,
+    }));
+  },
+}));
+
+export const useOrderDetailStore = create<OrderDetail>()((set) => ({
+  isTip: false,
+  tipValue: 0,
+  differentPhoneNumber: "",
+  additionalInformation: "",
+  setTip: () => {
+    set((state) => ({ isTip: !state.isTip }));
+  },
+  setTipValue: ({ tip }: { tip: number }) => {
+    set(() => ({
+      tipValue: tip,
+    }));
+  },
+  setDifferentPhone: ({ phone }: { phone: string }) => {
+    set(() => ({
+      differentPhoneNumber: phone,
+    }));
+  },
+  setAdditionalInformation: ({ info }: { info: string }) => {
+    set(() => ({
+      additionalInformation: info,
     }));
   },
 }));

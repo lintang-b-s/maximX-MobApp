@@ -54,7 +54,7 @@ const InputField = ({
               {...props}
             />
 
-            {(iconRight  && isFocused) && (
+            {iconRight && isFocused && (
               <TouchableOpacity onPress={IconRightOnPress}>
                 <Image
                   source={iconRight}
@@ -66,7 +66,6 @@ const InputField = ({
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
-    
   );
 };
 
