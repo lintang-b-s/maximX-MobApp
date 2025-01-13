@@ -1,31 +1,38 @@
 import ChooseLocation from "@/components/ChooseLocation";
 import ChooseLocationLayout from "@/components/ChooseLocationLayout";
-import { useLocationStore } from "@/store";
+import { useFavoriteRouteStore, useLocationStore } from "@/store";
 import { OSMMapProps } from "@/types/type";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-const ChoosePickUpLocation = () => {
+const ChooseFavoriteRouteSource = () => {
+  const { userLatitude, userLongitude, userAddress } = useLocationStore();
   const {
-    userLatitude,
-    userLongitude,
-    userAddress,
-    sourceLatitude,
-    sourceLongitude,
     sourceAddress,
     sourceLocationName,
-    setSourceLocation,
-  } = useLocationStore();
+    sourceLatitude,
+    sourceLongitude,
+    setFavoriteSourceLocation,
+  } = useFavoriteRouteStore();
   const params = useLocalSearchParams<{ query?: string }>();
+  const [showMarker, setShowMarker] = useState<boolean>(true);
 
   useEffect(() => {
-    setSourceLocation({
-      latitude: userLatitude!, // replace dg hasil search
-      longitude: userLongitude!,
-      locationName: params.query!,
-      address: params.query!,
-    });
+    if (sourceLatitude == undefined) {
+      setFavoriteSourceLocation({
+        latitude: userLatitude!,
+        longitude: userLongitude!,
+        address: userAddress!,
+        locationName: userAddress!,
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (params.query != undefined) {
+      setShowMarker(true);
+    }
   }, [params.query]);
 
   return (
@@ -34,12 +41,12 @@ const ChoosePickUpLocation = () => {
         location={{
           latitude: sourceLatitude!,
           longitude: sourceLongitude!,
-          showEarlyMarker: true,
+          showEarlyMarker: showMarker,
         }}
-        setLocation={setSourceLocation}
+        setLocation={setFavoriteSourceLocation}
       >
         <ChooseLocation
-          title="Pick-up point"
+          title="Address"
           locationName={sourceLocationName!}
           locationAddress={sourceAddress!}
         />
@@ -48,4 +55,4 @@ const ChoosePickUpLocation = () => {
   );
 };
 
-export default ChoosePickUpLocation;
+export default ChooseFavoriteRouteSource;

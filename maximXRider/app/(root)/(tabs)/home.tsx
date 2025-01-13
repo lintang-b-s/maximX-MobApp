@@ -18,10 +18,9 @@ import * as Location from "expo-location";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
-
-function truncateText(text: string, maxLength: number = 34): string {
-  return text.length > maxLength ? `${text.slice(0, maxLength)}....` : text;
-}
+import PickUpLocation from "@/components/PickUpLocation";
+import DestinationLocation from "@/components/DestinationLocation";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
 
 export default function Home() {
   const {
@@ -156,60 +155,16 @@ export default function Home() {
       </View>
       <View className="flex flex-col h-screen gap-[14%]">
         <View className="flex w-full h-1/4   border-b-4   justify-start items-center border-b-general-600 gap-2">
-          <TouchableOpacity onPress={handlePickUpLocationPress}>
-            <View className="flex justify-start w-96 h-36 items-center bg-general-600 rounded-xl py-2 px-6 ">
-              <View className="flex flex-row items-center justify-start w-96 px-6  gap-2">
-                <Image source={icons.circle} className="mr-5 h-8 w-8" />
+          <PickUpLocation
+            sourceAddress={sourceAddress}
+            sourceLocationName={sourceLocationName}
+            handlePickUpLocationPress={handlePickUpLocationPress}
+          />
 
-                <View className="flex justify-start items-start ">
-                  <Text className="text-general-900 font-Roboto text-base">
-                    Pick-Up Location
-                  </Text>
-
-                  <Text className="text-secondary-900 font-Roboto text-lg ">
-                    {sourceLocationName
-                      ? truncateText(sourceLocationName!, 34)
-                      : "source address"}
-                  </Text>
-
-                  <Text className="text-secondary-400 font-Roboto text-base ">
-                    {sourceAddress
-                      ? truncateText(sourceAddress!, 34)
-                      : "source address"}
-                  </Text>
-                </View>
-
-                <Image
-                  source={icons.forwardArrow}
-                  className="w-8 h-8 absolute left-[290px]"
-                />
-              </View>
-
-              <View className="flex  flex-row px-6 justify-start items-center w-72 p-1 rounded-xl mt-2  ml-12 bg-white">
-                <Text className="font-Roboto text-secondary-400">
-                  Pick-up point
-                </Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={handleDestinationLocationPress}>
-            <View className="flex flex-row  justify-start  w-96 h-14 items-center bg-general-600 rounded-xl py-4 px-6 gap-4 ">
-              <View className="rounded-full h-8 w-8 items-center justify-center bg-general-900 ">
-                <Image source={icons.flag} className="w-6 h-6" />
-              </View>
-              <Text className="text-base text-general-900 font-Roboto  ">
-                {destinationLocationName
-                  ? truncateText(destinationLocationName, 34)
-                  : "Destination"}
-              </Text>
-
-              <Image
-                source={icons.forwardArrow}
-                className="w-8 h-8 absolute left-[290px]"
-              />
-            </View>
-          </TouchableOpacity>
+          <DestinationLocation
+            destinationLocationName={destinationLocationName}
+            handleDestinationLocationPress={handleDestinationLocationPress}
+          />
         </View>
 
         {/* section details & order */}
@@ -263,7 +218,7 @@ export default function Home() {
                 onPress={() => selectSelectedMenu(item.title)}
               >
                 <View
-                  className={`rounded-2xl bg-white m-2  border border-b-2 border-slate-200 p-8 ${item.title === selectedMenu ? "border-general-700 border-4" : ""}`}
+                  className={`rounded-2xl bg-white m-2  border  p-8 ${item.title === selectedMenu ? "border-general-700 border-4" : "border-b-2 border-slate-200"}`}
                 >
                   <Image source={item.icon} className="h-12 w-12" />
                   <Text className="mt-4 font-RobotoSemiBold text-base text-secondary-900">
@@ -278,7 +233,7 @@ export default function Home() {
         </View>
       </View>
       {showTimePicker && (
-        <DateTimePicker
+        <RNDateTimePicker
           testID="datetimePicker"
           value={date}
           display="spinner"
@@ -288,7 +243,7 @@ export default function Home() {
       )}
 
       {showDatePicker && (
-        <DateTimePicker
+        <RNDateTimePicker
           testID="datetimePicker"
           value={date}
           display="spinner"

@@ -34,12 +34,34 @@ import mapDest from "@/assets/icons/map_dest.png";
 import contact from "@/assets/icons/contact.png";
 import chat from "@/assets/icons/chat.png";
 import more from "@/assets/icons/more.png";
+import mascot from "@/assets/images/mascot.png";
+import plus from "@/assets/icons/plus.png";
+import { FavoriteAddress, FavoriteRoute } from "@/types/type";
+import pencil from "@/assets/icons/pencil.png";
+import circleDestination from "@/assets/icons/circle_destination.png";
+import trash from "@/assets/icons/trash.png";
+import maximLogo2 from "@/assets/images/logo.png";
+import maximOjek from "@/assets/images/maxim_ojek.png";
+import kaspro from "@/assets/images/kaspro.png";
+import settings from "@/assets/icons/gear.png";
+import support from "@/assets/icons/support.png";
+import notification from "@/assets/icons/notifications.png";
+import creditCard from "@/assets/icons/credit_card.png";
+import person from "@/assets/icons/person.png";
+import call from "@/assets/icons/call.png";
+import gender from "@/assets/icons/gender.png";
+import calendar from "@/assets/icons/calendar.png";
+import mailFill from "@/assets/icons/mail-fill.png";
 
 export const images = {
   maximLogo,
   indonesianFlag,
   maximBig,
   driver,
+  mascot,
+  maximLogo2,
+  maximOjek,
+  kaspro,
 };
 
 export const icons = {
@@ -48,6 +70,10 @@ export const icons = {
   password,
   close,
   home,
+  plus,
+  gender,
+  calendar,
+  mailFill,
   orders,
   favorites,
   menu,
@@ -65,6 +91,7 @@ export const icons = {
   cash,
   arrowBack,
   mic,
+  call,
   profile,
   check,
   location,
@@ -75,6 +102,14 @@ export const icons = {
   contact,
   chat,
   more,
+  pencil,
+  circleDestination,
+  trash,
+  settings,
+  support,
+  notification,
+  creditCard,
+  person,
 };
 
 export const menuItems: { id: number; title: string; icon: any }[] = [
@@ -187,5 +222,33 @@ export const rideHistory: {
     rideDate: new Date(2025, 1, 3, 2, 0),
     rideCompleteDate: new Date(2025, 1, 3, 3, 0),
     status: RideStatus.COMPLETED,
+  },
+];
+
+export const favoriteAddressesDummy: FavoriteAddress[] = [
+  {
+    favoriteName: "rumah",
+    favoriteItemColor: "bg-sky-500",
+    favoriteAddress: "rumah jalan mulwo",
+    favoriteLatitude: -7.5678798860174075,
+    favoriteLongitude: 110.816718895165,
+    favoriteLocationName: "rumah",
+  },
+];
+
+export const favoriteRoutesDummy: FavoriteRoute[] = [
+  {
+    favoriteName: "rumah",
+    favoriteItemColor: "bg-green-500",
+    favoriteSourceAddress: "rumah jalan mulwo",
+    favoriteSourceLatitude: -7.5678798860174075,
+    favoriteSourceLongitude: 110.816718895165,
+    favoriteSourceLocationName: "rumah",
+
+    favoriteDestinationAddress:
+      "Jl. Masjid Agung No.1, Kauman, Kec. Ps. Kliwon, Kota Surakarta, Jawa Tengah 57122",
+    favoriteDestinationLatitude: -7.574126168226208,
+    favoriteDestinationLongitude: 110.82655346366388,
+    favoriteDestinationLocationName: "Masjid Agung Pasar Kliwon",
   },
 ];

@@ -1,5 +1,7 @@
 import { Stack } from "expo-router";
 import Header from "@/components/Header";
+import { Image, TouchableOpacity } from "react-native";
+import { icons } from "@/constants";
 
 export default function Layout() {
   return (
@@ -27,6 +29,47 @@ export default function Layout() {
         options={{
           headerTitle: () => <Header title="Order details" />,
         }}
+      />
+
+      <Stack.Screen
+        name="add-favorite-address"
+        options={{
+          headerTitle: () => <Header title="Add address" />,
+        }}
+      />
+
+      <Stack.Screen
+        name="edit-favorite-address"
+        options={{
+          headerTitle: () => <Header title="Edit address" />,
+          headerRight: () => (
+            <TouchableOpacity>
+              <Image source={icons.trash} className="size-8" />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+
+      <Stack.Screen
+        name="edit-profile"
+        options={{
+          headerTitle: () => <Header title="Profile" />,
+        }}
+      />
+
+      <Stack.Screen
+        name="choose-favorite-address"
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="choose-favorite-route-source"
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="choose-favorite-route-destination"
+        options={{ headerShown: false }}
       />
     </Stack>
   );

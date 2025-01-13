@@ -92,9 +92,10 @@ declare interface StarRatingProps {
 
 declare interface HeaderProps {
   title: string;
+  className?: string;
 }
 
-declare interface OrderDetail {
+declare interface OrderDetailStore {
   isTip: boolean;
   tipValue: number;
   differentPhoneNumber: string;
@@ -114,3 +115,102 @@ declare interface RideProps {
   rideCompleteDate: Date;
   status: RideStatus;
 }
+
+declare interface FavoriteAdressStore {
+  favoriteName: string;
+  favoriteItemColor: string;
+  favoriteLatitude: number | null;
+  favoriteLongitude: number | null;
+  favoriteLocationName: string | null;
+  favoriteAddress: string | null;
+
+  setFavoriteLocation: ({
+    latitude,
+    longitude,
+    locationName,
+    address,
+  }: {
+    latitude: number;
+    longitude: number;
+    locationName: string;
+    address: string;
+  }) => void;
+
+  setFavoriteName: ({
+    favoriteName,
+    favoriteItemColor,
+  }: {
+    favoriteName: string;
+    favoriteItemColor: string;
+  }) => void;
+}
+
+declare interface FavoriteRouteStore {
+  favoriteName: string;
+  favoriteItemColor: string;
+  sourceLatitude: number | null;
+  sourceLongitude: number | null;
+  sourceLocationName: string | null;
+  sourceAddress: string | null;
+
+  setFavoriteRouteName: ({
+    favoriteName,
+    favoriteItemColor,
+  }: {
+    favoriteName: string;
+    favoriteItemColor: string;
+  }) => void;
+
+  setFavoriteSourceLocation: ({
+    latitude,
+    longitude,
+    locationName,
+    address,
+  }: {
+    latitude: number;
+    longitude: number;
+    locationName: string;
+    address: string;
+  }) => void;
+
+  destinationLatitude: number | null;
+  destinationLongitude: number | null;
+  destinationLocationName: string | null;
+  destinationAddress: string | null;
+
+  setFavoriteDestinationLocation: ({
+    latitude,
+    longitude,
+    locationName,
+    address,
+  }: {
+    latitude: number;
+    longitude: number;
+    locationName: string;
+    address: string;
+  }) => void;
+}
+
+declare interface FavoriteAddress {
+  favoriteName: string;
+  favoriteItemColor: string;
+  favoriteLatitude: number;
+  favoriteLongitude: number;
+  favoriteLocationName: string;
+  favoriteAddress: string;
+}
+
+declare interface FavoriteRoute {
+  favoriteName: string;
+  favoriteItemColor: string;
+  favoriteSourceLatitude: number;
+  favoriteSourceLongitude: number;
+  favoriteSourceLocationName: string;
+  favoriteSourceAddress: string;
+
+  favoriteDestinationLatitude: number;
+  favoriteDestinationLongitude: number;
+  favoriteDestinationLocationName: string;
+  favoriteDestinationAddress: string;
+}
+
