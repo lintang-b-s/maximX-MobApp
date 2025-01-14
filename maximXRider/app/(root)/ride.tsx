@@ -1,7 +1,7 @@
 import RideLayout from "@/components/RideLayout";
 import { icons, images } from "@/constants";
 import { useLocationStore } from "@/store";
-import { Image, Text, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import Feather from "@react-native-vector-icons/feather";
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import CustomButton from "@/components/CustomButton";
@@ -9,6 +9,10 @@ import { router } from "expo-router";
 
 const Ride = () => {
   const { userLatitude, userLongitude } = useLocationStore();
+
+  const handleChatPress = () => {
+    router.push("/(root)/chats/1");
+  };
   return (
     <RideLayout
       location={{
@@ -39,9 +43,11 @@ const Ride = () => {
             <View className="flex items-center justify-center  rounded-full p-5 bg-[#F5F5FF]">
               <Feather name="phone" color={"#5256E8"} size={14} />
             </View>
-            <View className="flex items-center justify-center  rounded-full p-5 bg-[#F5F5FF]">
-              <Feather name="mail" color={"#5256E8"} size={14} />
-            </View>
+            <TouchableOpacity onPress={handleChatPress}>
+              <View className="flex items-center justify-center  rounded-full p-5 bg-[#F5F5FF]">
+                <Feather name="mail" color={"#5256E8"} size={14} />
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -125,9 +131,12 @@ const Ride = () => {
           </Text>
         </View>
 
-        <CustomButton title="order summary (dummy)" onPress={() => {
-          router.push("/(root)/order-summary")
-        }} />
+        <CustomButton
+          title="order summary (dummy)"
+          onPress={() => {
+            router.push("/(root)/order-summary");
+          }}
+        />
       </View>
     </RideLayout>
   );

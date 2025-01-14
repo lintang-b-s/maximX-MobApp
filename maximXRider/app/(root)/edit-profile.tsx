@@ -113,6 +113,7 @@ const EditProfile = () => {
             onPress={() => {
               setEditFullName(true);
             }}
+            disabled={(editDOB || editFullName || editMail || editGender) ? true : false}
           >
             <View className="flex flex-row gap-6 items-center justify-start p-4 w-full">
               <Image source={icons.person} className="size-8" />
@@ -134,6 +135,9 @@ const EditProfile = () => {
             onPress={() => {
               setEditGender(true);
             }}
+            disabled={
+              editDOB || editFullName || editMail || editGender ? true : false
+            }
           >
             <View className="flex flex-row gap-6 items-center justify-start p-4 w-full">
               <Image source={icons.gender} className="size-8" />
@@ -155,6 +159,9 @@ const EditProfile = () => {
             onPress={() => {
               setEditDOB(true);
             }}
+            disabled={
+              editDOB || editFullName || editMail || editGender ? true : false
+            }
           >
             <View className="flex flex-row gap-6 items-center justify-start p-4 w-full">
               <Image source={icons.calendar} className="size-8" />
@@ -176,6 +183,9 @@ const EditProfile = () => {
             onPress={() => {
               setEditMail(true);
             }}
+            disabled={
+              editDOB || editFullName || editMail || editGender ? true : false
+            }
           >
             <View className="flex flex-row gap-6 items-center justify-start p-4 w-full">
               <Image source={icons.mailFill} className="size-8" />

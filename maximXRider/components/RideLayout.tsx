@@ -36,7 +36,7 @@ const RideLayout = ({
                 <Image
                   source={icons.arrowBack}
                   resizeMode="contain"
-                  className="w-6 h-6"
+                  className="w-6 h-6 ml-2"
                 />
               </View>
             </TouchableOpacity>

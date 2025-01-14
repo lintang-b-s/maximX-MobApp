@@ -7,6 +7,7 @@ export default function Layout() {
   return (
     <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="chats" options={{ headerShown: false }} />
       <Stack.Screen
         name="choose-pickup-location"
         options={{ headerShown: false }}
@@ -69,6 +70,11 @@ export default function Layout() {
 
       <Stack.Screen
         name="choose-favorite-route-destination"
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="looking-nearby-driver"
         options={{ headerShown: false }}
       />
     </Stack>

@@ -92,7 +92,8 @@ export default function Home() {
   }, [userAddress, sourceAddress, sourceLocationName]);
 
   const handleOrderPress = () => {
-    router.push("/(root)/ride");
+    // router.push("/(root)/ride");
+    router.push("/(root)/looking-nearby-driver");
   };
 
   const handleDetailPress = () => {

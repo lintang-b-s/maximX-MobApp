@@ -52,6 +52,8 @@ import call from "@/assets/icons/call.png";
 import gender from "@/assets/icons/gender.png";
 import calendar from "@/assets/icons/calendar.png";
 import mailFill from "@/assets/icons/mail-fill.png";
+import lookingForCar from "@/assets/images/looking-for-car.png";
+import chatBg from "@/assets/images/chat-bg.jpg";
 
 export const images = {
   maximLogo,
@@ -62,6 +64,8 @@ export const images = {
   maximLogo2,
   maximOjek,
   kaspro,
+  lookingForCar,
+  chatBg,
 };
 
 export const icons = {
@@ -252,3 +256,20 @@ export const favoriteRoutesDummy: FavoriteRoute[] = [
     favoriteDestinationLocationName: "Masjid Agung Pasar Kliwon",
   },
 ];
+
+export const chatDummy = [
+  {
+    id: "6139e7c6580e9b39d1c6b222",
+    from: 1,
+    date: "Wed Aug 25 2025  04:35:00 ",
+    msg: "ya sesuai",
+  },
+  {
+    id: "6139e7c6580e9b39d1c6b266",
+    from: 0,
+    date: "Wed Aug 25 2025  04:34:32 ",
+    msg: "apakah titik antar sesuai?",
+  },
+];
+
+
