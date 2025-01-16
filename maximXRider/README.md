@@ -16,9 +16,10 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
     npx expo start
    ```
 
-3. or pake android emulator
+3. or pake android
 
    ```bash
+   npx expo prebuild --clean
    npx expo run:android
    ```
 

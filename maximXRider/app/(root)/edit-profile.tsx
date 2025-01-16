@@ -13,9 +13,7 @@ import {
 } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-import DateTimePicker, {
-  DateTimePickerEvent,
-} from "@react-native-community/datetimepicker";
+import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 
@@ -113,7 +111,9 @@ const EditProfile = () => {
             onPress={() => {
               setEditFullName(true);
             }}
-            disabled={(editDOB || editFullName || editMail || editGender) ? true : false}
+            disabled={
+              editDOB || editFullName || editMail || editGender ? true : false
+            }
           >
             <View className="flex flex-row gap-6 items-center justify-start p-4 w-full">
               <Image source={icons.person} className="size-8" />
