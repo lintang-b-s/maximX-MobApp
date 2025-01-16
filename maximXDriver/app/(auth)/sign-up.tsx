@@ -27,6 +27,7 @@ const SignUp = () => {
 
   const [email, setEmail] = useState("");
   const [refCode, setRefCode] = useState("");
+  const [password, setPassword] = useState("");
 
   const [phoneNumber, setPhoneNumber] = useState("");
 
@@ -93,6 +94,15 @@ const SignUp = () => {
             placeholder={city}
             label="City"
           />
+
+          <InputField
+            label="Password"
+            placeholder="e.g. passsword123*"
+            value={password}
+            secureTextEntry
+            onChangeText={(val) => setPassword(val)}
+          />
+
           <InputField
             label="Referal Code (Optional)"
             placeholder="e.g. AZXBAH717"
@@ -113,27 +123,36 @@ const SignUp = () => {
 
           <CustomButton
             active={
-              name !== "" && email !== "" && phoneNumber !== "" && city !== ""
+              name !== "" &&
+              email !== "" &&
+              phoneNumber !== "" &&
+              city !== "" &&
+              password != ""
             }
             disabled={
-              !(name !== "" && email !== "" && phoneNumber !== "" && city !== "")
+              !(
+                name !== "" &&
+                email !== "" &&
+                phoneNumber !== "" &&
+                city !== "" &&
+                password !== ""
+              )
             }
             title="Create an account"
             onPress={handleCreateAccountPress}
           />
         </View>
 
-        {showSelectCity && (
-          <>
-            <DropdownBottomSheet
-              handleFilter={handleFilter}
-              data={cities}
-              setData={setCity}
-              setShow={setShowSelectCity}
-              icon="location-sharp"
-            />
-          </>
-        )}
+        <>
+          <DropdownBottomSheet
+            handleFilter={handleFilter}
+            data={cities}
+            setData={setCity}
+            setShow={setShowSelectCity}
+            icon="location-sharp"
+            open={showSelectCity}
+          />
+        </>
       </KeyboardAvoidingView>
     </GestureHandlerRootView>
   );

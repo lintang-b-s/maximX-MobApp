@@ -39,7 +39,7 @@ const VerifyPhone = () => {
 
   useEffect(() => {
     if (code.length === 6) {
-      console.log("code", code);
+
       if (signin === "true") {
         verifySignIn();
       } else {
@@ -112,7 +112,9 @@ const VerifyPhone = () => {
               code.length == 6 ? "bg-general-300" : "bg-general-600"
             }`}
             disabled={code.length !== 6}
-            onPress={() => {}}
+            onPress={() => {
+              router.replace("/(root)/home");
+            }}
           >
             <Text
               className={`   ${
@@ -127,7 +129,7 @@ const VerifyPhone = () => {
             className=" absolute bottom-5 left-2  flex flex-row items-center justify-center gap-2 p-4"
             onPress={resendCode}
           >
-            <Ionicons name="refresh" color="#2E2D59"  size={17}/>
+            <Ionicons name="refresh" color="#2E2D59" size={17} />
             <Text className="text-base text-general-300 font-RobotoBold">
               Resend Code
             </Text>

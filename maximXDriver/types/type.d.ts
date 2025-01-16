@@ -64,6 +64,7 @@ declare interface DropDownBottomSheetProps {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   dataIcon?: any;
   icon?: "location-sharp";
+  open: boolean;
 }
 
 declare interface DropDownProps {

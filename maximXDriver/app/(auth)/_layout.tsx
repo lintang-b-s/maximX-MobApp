@@ -26,6 +26,22 @@ const Layout = () => {
           headerShadowVisible: false,
         }}
       />
+
+      <Stack.Screen
+        name="driver-registration-three"
+        options={{
+          headerTitle: "Driver Registration",
+          headerShadowVisible: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="driver-registration-complete"
+        options={{
+          headerTitle: "Driver Registration",
+          headerShadowVisible: false,
+        }}
+      />
     </Stack>
   );
 };

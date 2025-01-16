@@ -16,7 +16,10 @@ import {
 import CustomButton from "@/components/CustomButton";
 import * as FileSystem from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
+
+
 import Ionicons from "@react-native-vector-icons/ionicons";
+import { router } from "expo-router";
 
 const imgDir =
   FileSystem.documentDirectory + "images-" + new Date().getTime() + "/";
@@ -42,9 +45,6 @@ const DriverRegistrationTwo = () => {
   const loadImages = async () => {
     await ensureDirExists();
     const files = await FileSystem.readDirectoryAsync(imgDir);
-    if (files.length > 0) {
-      setImage(files[0]);
-    }
   };
 
   const deleteImage = async (uri: string) => {
@@ -55,7 +55,7 @@ const DriverRegistrationTwo = () => {
   const selectImage = async (useLibrary: boolean) => {
     let result;
     const options: ImagePicker.ImagePickerOptions = {
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes:["images"],
       allowsEditing: true,
       aspect: [16, 9],
       quality: 0.75,
@@ -107,7 +107,11 @@ const DriverRegistrationTwo = () => {
     setTimeout(() => {
       setUploading(false);
     }, 500);
+    if (step == 4) {
+      router.push("/(auth)/driver-registration-three");
+    }
     setStep(step + 1);
+
     setImage("");
   };
 
@@ -204,7 +208,7 @@ const DriverRegistrationTwo = () => {
                   />
                 )}
                 onPress={() => selectImage(true)}
-                className="w-2/3 rounded-full"
+                className="w-1/2 rounded-full"
               />
             )}
           </TouchableOpacity>

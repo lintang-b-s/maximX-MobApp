@@ -16,6 +16,7 @@ const ShowDropDownBottomSheet = ({
   setState,
   setShow,
   dataIcon,
+  show,
 }: {
   dataOrigin: string[];
   data: string[];
@@ -23,6 +24,7 @@ const ShowDropDownBottomSheet = ({
   setState: React.Dispatch<React.SetStateAction<string>>;
   setShow: () => void;
   dataIcon?: any;
+  show: boolean;
 }) => {
   const handleFilter = (searchTerm: string) => {
     if (searchTerm !== "") {
@@ -43,6 +45,7 @@ const ShowDropDownBottomSheet = ({
       setData={setState}
       setShow={setShow}
       dataIcon={dataIcon}
+      open={show}
     />
   );
 };
@@ -81,6 +84,7 @@ const DriverRegistrationOne = () => {
             setShow={() => {
               setShowType("");
             }}
+            show={showType !== ""}
           />
         );
       case "models":
@@ -93,6 +97,7 @@ const DriverRegistrationOne = () => {
             setShow={() => {
               setShowType("");
             }}
+            show={showType !== ""}
           />
         );
       case "color":
@@ -106,6 +111,7 @@ const DriverRegistrationOne = () => {
               setShowType("");
             }}
             dataIcon={carColorIcons}
+            show={showType !== ""}
           />
         );
     }

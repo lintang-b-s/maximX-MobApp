@@ -1,8 +1,10 @@
 import indonesianFlag from "@/assets/images/idn.png";
 import next from "@/assets/icons/next.png";
+import formChecklist from "@/assets/images/form-ok.png";
 
 export const images = {
   indonesianFlag,
+  formChecklist,
 };
 
 export const icons = {
@@ -99,3 +101,25 @@ export const carColorIcons = {
   red: "#ef4444",
   white: "#fffff",
 };
+
+export const KTP = [
+  /\d/,
+  /\d/,
+  /\d/,
+  /\d/,
+  "-",
+  /\d/,
+  /\d/,
+  /\d/,
+  /\d/,
+  "-",
+  /\d/,
+  /\d/,
+  /\d/,
+  /\d/,
+  "-",
+  /\d/,
+  /\d/,
+  /\d/,
+  /\d/,
+];

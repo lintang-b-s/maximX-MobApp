@@ -6,8 +6,11 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import React, { useRef } from "react";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import React, { useEffect, useRef } from "react";
+import BottomSheet, {
+  BottomSheetScrollView,
+  BottomSheetView,
+} from "@gorhom/bottom-sheet";
 import Ionicons from "@react-native-vector-icons/ionicons";
 import { DropDownBottomSheetProps } from "@/types/type";
 import { icons } from "@/constants";
@@ -19,15 +22,25 @@ const DropdownBottomSheet = ({
   setShow,
   dataIcon,
   icon,
+  open,
 }: DropDownBottomSheetProps) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
+
+  useEffect(() => {
+    if (open) {
+      bottomSheetRef.current?.collapse();
+      bottomSheetRef.current?.snapToIndex(1);
+    } else {
+      bottomSheetRef.current?.close();
+    }
+  }, [open]);
 
   return (
     <BottomSheet
       keyboardBehavior="extend"
       ref={bottomSheetRef}
       snapPoints={["30%", "50%"]}
-      index={0}
+      index={-1}
     >
       <BottomSheetView
         style={{
@@ -36,7 +49,7 @@ const DropdownBottomSheet = ({
         }}
         className="bg-white"
       >
-        <ScrollView className="flex-1 ">
+        <BottomSheetScrollView className="flex-1 ">
           <View className="flex flex-row justify-between p-4 gap-2  items-center bg-general-600 rounded-xl mb-4">
             <Ionicons name="search-outline" size={12} />
             <TextInput
@@ -74,7 +87,7 @@ const DropdownBottomSheet = ({
               </TouchableOpacity>
             ))}
           </View>
-        </ScrollView>
+        </BottomSheetScrollView>
       </BottomSheetView>
     </BottomSheet>
   );

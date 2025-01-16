@@ -4,10 +4,6 @@ import { useFonts } from "expo-font";
 import "../global.css";
 import { useEffect } from "react";
 
-
-
-
-
 export default function RootLayout() {
   const [loaded] = useFonts({
     "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
@@ -34,6 +30,7 @@ export default function RootLayout() {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       <Stack.Screen name="(verify)" options={{ headerShown: false }} />
+      <Stack.Screen name="(root)" options={{ headerShown: false }} />
     </Stack>
   );
 }
