@@ -57,7 +57,7 @@ const DriverRegistrationTwo = () => {
     const options: ImagePicker.ImagePickerOptions = {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [16, 9],
       quality: 0.75,
     };
     if (useLibrary) {
@@ -87,8 +87,19 @@ const DriverRegistrationTwo = () => {
     setImage(dest);
   };
 
-  const renderItem = ({ item }: { item: string }) => {
-    return <Image source={{ uri: item }} className="w-full h-full" />;
+  const renderItem = ({
+    item,
+    rounded,
+  }: {
+    item: string;
+    rounded: boolean;
+  }) => {
+    return (
+      <Image
+        source={{ uri: item }}
+        className={`w-full h-full ${rounded && "rounded-full"}`}
+      />
+    );
   };
 
   const uploadImage = async (uri: string) => {
@@ -96,6 +107,8 @@ const DriverRegistrationTwo = () => {
     setTimeout(() => {
       setUploading(false);
     }, 500);
+    setStep(step + 1);
+    setImage("");
   };
 
   const renderTextInstruction = () => {
@@ -151,9 +164,12 @@ const DriverRegistrationTwo = () => {
           </Text>
         );
       case 4:
-       return  <Text className="text-base text-secondary-200 font-Roboto">
-          Make sure you show your full face and sholders and take off your sunglasses or hat.
-        </Text>;
+        return (
+          <Text className="text-base text-secondary-200 font-Roboto">
+            Make sure you show your full face and sholders and take off your
+            sunglasses or hat.
+          </Text>
+        );
     }
   };
 
@@ -168,41 +184,69 @@ const DriverRegistrationTwo = () => {
           {renderTextInstruction()}
         </Text>
 
-        <TouchableOpacity
-          className="flex items-center justify-center w-full h-60 rounded-xl border border-dashed border-general-300 bg-general-300/40"
-          onPress={() => selectImage(true)}
-        >
-          {image !== "" ? (
-            renderItem({ item: image })
-          ) : (
-            <CustomButton
-              title="upload"
-              active={true}
-              IconLeft={() => (
-                <Ionicons
-                  name="cloud-upload-outline"
-                  style={{ marginRight: 12 }}
-                  color={"white"}
-                  size={16}
-                />
-              )}
-              onPress={() => selectImage(true)}
-              className="w-1/2 rounded-full"
-            />
-          )}
-        </TouchableOpacity>
+        {step != 4 ? (
+          <TouchableOpacity
+            className="flex items-center justify-center w-full h-60 rounded-xl border border-dashed border-general-300 bg-general-300/40"
+            onPress={() => selectImage(true)}
+          >
+            {image !== "" ? (
+              renderItem({ item: image, rounded: false })
+            ) : (
+              <CustomButton
+                title="upload"
+                active={true}
+                IconLeft={() => (
+                  <Ionicons
+                    name="cloud-upload-outline"
+                    style={{ marginRight: 12 }}
+                    color={"white"}
+                    size={16}
+                  />
+                )}
+                onPress={() => selectImage(true)}
+                className="w-2/3 rounded-full"
+              />
+            )}
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            className="flex self-center items-center relative w-[50%] h-60 rounded-full border border-dashed border-general-300 bg-general-300/40"
+            onPress={() => selectImage(true)}
+          >
+            {image !== "" ? (
+              renderItem({
+                item: image,
+                rounded: true,
+              })
+            ) : (
+              <CustomButton
+                title="upload"
+                active={true}
+                IconLeft={() => (
+                  <Ionicons
+                    name="cloud-upload-outline"
+                    style={{ marginRight: 12 }}
+                    color={"white"}
+                    size={16}
+                  />
+                )}
+                onPress={() => selectImage(true)}
+                className="w-2/3 rounded-full absolute bottom-[-14px]"
+              />
+            )}
+          </TouchableOpacity>
+        )}
+
         {image !== "" ? (
           <Text className="text-base text-secondary-200 font-Roboto">
             Submit this image if you think it's readable or tap on re-upload
             button to upload another one.
           </Text>
         ) : (
-          <Text className="text-base text-secondary-200 font-Roboto">
-            Make sure your Driver's license is not expired. Please click a
-            clearer photo and avoid using flash.
-          </Text>
+          renderTextUploadInstruction()
         )}
       </View>
+
       {image !== "" ? (
         <View className="absolute bottom-4 flex flex-row items-center gap-2  justify-center w-full">
           <View className="w-[45%]">

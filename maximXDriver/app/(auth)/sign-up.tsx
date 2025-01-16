@@ -88,7 +88,11 @@ const SignUp = () => {
             mask={ID_PHONE}
           />
 
-          <Dropdown setShow={setShowSelectCity} placeholder={city} label="City"/>
+          <Dropdown
+            setShow={setShowSelectCity}
+            placeholder={city}
+            label="City"
+          />
           <InputField
             label="Referal Code (Optional)"
             placeholder="e.g. AZXBAH717"
@@ -110,6 +114,9 @@ const SignUp = () => {
           <CustomButton
             active={
               name !== "" && email !== "" && phoneNumber !== "" && city !== ""
+            }
+            disabled={
+              !(name !== "" && email !== "" && phoneNumber !== "" && city !== "")
             }
             title="Create an account"
             onPress={handleCreateAccountPress}
