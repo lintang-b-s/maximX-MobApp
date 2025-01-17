@@ -8,7 +8,7 @@ import {
   ScrollView,
   TextInput,
 } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import InputField from "@/components/InputField";
@@ -20,6 +20,7 @@ import CustomButton from "@/components/CustomButton";
 import DropdownBottomSheet from "@/components/DropdownBottomSheet";
 import Dropdown from "@/components/Dropdown";
 import { router } from "expo-router";
+import BottomSheet from "@gorhom/bottom-sheet";
 
 const SignUp = () => {
   const { bottom, top } = useSafeAreaInsets();
@@ -52,6 +53,16 @@ const SignUp = () => {
   const handleCreateAccountPress = () => {
     router.push("/(auth)/driver-registration-one");
   };
+
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
+  useEffect(() => {
+    if (showSelectCity) {
+      bottomSheetRef.current?.collapse();
+    } else {
+      bottomSheetRef.current?.close();
+    }
+  }, [showSelectCity]);
 
   return (
     <GestureHandlerRootView className="flex-1">
@@ -151,6 +162,7 @@ const SignUp = () => {
             setShow={setShowSelectCity}
             icon="location-sharp"
             open={showSelectCity}
+            ref={bottomSheetRef}
           />
         </>
       </KeyboardAvoidingView>

@@ -39,3 +39,8 @@ app-example
 
 android/
 ios/
+
+# Expo
+.expo
+dist/
+web-build/

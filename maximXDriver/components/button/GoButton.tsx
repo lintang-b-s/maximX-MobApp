@@ -1,4 +1,4 @@
-import { ButtonProps } from "@/types/type";
+import { ButtonProps, GoButtonProps } from "@/types/type";
 import { TouchableOpacity, Text, TouchableHighlight } from "react-native";
 import Animated from "react-native-reanimated";
 const AnimatedTouchableOpacity =
@@ -38,9 +38,9 @@ const getTextVariantStyle = (variant: ButtonProps["textVariant"]) => {
   }
 };
 
-const CustomButton = ({
+const GoButton = ({
   onPress,
-  title,
+
   bgVariant = "primary",
   textVariant = "secondary",
   IconLeft,
@@ -48,9 +48,10 @@ const CustomButton = ({
   className,
   active,
   style,
+  children,
 
   ...props
-}: ButtonProps) => {
+}: GoButtonProps) => {
   return (
     <AnimatedTouchableOpacity
       onPress={onPress}
@@ -61,15 +62,11 @@ const CustomButton = ({
     >
       {IconLeft && <IconLeft />}
 
-      <Text
-        className={`text-lg font-RobotoSemiBold ${active ? getTextVariantStyle(textVariant) : getTextVariantStyle("inactive")} `}
-      >
-        {title}
-      </Text>
+      {children}
 
       {IconRight && <IconRight />}
     </AnimatedTouchableOpacity>
   );
 };
 
-export default CustomButton;
+export default GoButton;

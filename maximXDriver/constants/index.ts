@@ -1,14 +1,25 @@
 import indonesianFlag from "@/assets/images/idn.png";
 import next from "@/assets/icons/next.png";
 import formChecklist from "@/assets/images/form-ok.png";
+import steer from "@/assets/icons/steer.png";
+import paid from "@/assets/icons/paid.png";
+import { SlidesDataWeeklyChallenge } from "@/components/Slider";
+import { SlidesDataOportunity } from "@/components/Oportunity";
+import { SlidesDataLearningHub } from "@/components/LearningHub";
+import uberDriverInCarOne from "@/assets/images/uber-driver-in-car-1.jpg";
+import dapatUangTip from "@/assets/images/dapat-uang-tip.jpg";
 
 export const images = {
   indonesianFlag,
   formChecklist,
+  uberDriverInCarOne,
+  dapatUangTip,
 };
 
 export const icons = {
   next,
+  steer,
+  paid,
 };
 
 export const ID_PHONE = [
@@ -122,4 +133,49 @@ export const KTP = [
   /\d/,
   /\d/,
   /\d/,
+];
+
+export const SlidesWeeklyChallengeData: SlidesDataWeeklyChallenge[] = [
+  {
+    endsOn: new Date(2025, 1, 12),
+    item: 10,
+    target: 20,
+    extra: 35,
+  },
+  {
+    endsOn: new Date(2025, 1, 12),
+    item: 10,
+    target: 30,
+    extra: 50,
+  },
+  {
+    endsOn: new Date(2025, 1, 12),
+    item: 10,
+    target: 50,
+    extra: 70,
+  },
+];
+
+export const slidesOportunities: SlidesDataOportunity[] = [
+  {
+    title: "Soccer night at Jonty's FCB",
+    description:
+      "Get faster requests from 10:00PM at Jonty's FCS, Hamline Ave N",
+  },
+  {
+    title: "Soccer night at Manahan Stadium",
+    description:
+      "Get faster requests from 10:00PM at Jonty's FCS, Hamline Ave N",
+  },
+];
+
+export const slidesDataLearningHubs: SlidesDataLearningHub[] = [
+  {
+    title: "Tips to get 5-star ratings from your customers",
+    image: images.uberDriverInCarOne,
+  },
+  {
+    title: "Tips untuk mendapatkan uang tip banyak dari customers anda",
+    image: images.dapatUangTip,
+  },
 ];

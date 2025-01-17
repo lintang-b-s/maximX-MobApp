@@ -131,11 +131,11 @@ export default function Home() {
     }
   };
 
-  const nextFiveDay = (date.getDate() + 5) % 30;
+  const nextFiveDay = (date.getDate() + 5) % 31;
 
   const maxDay = new Date(
     date.getFullYear(),
-    date.getDay() + 10 > 30 ? date.getMonth() + 1 : date.getMonth(),
+    date.getDate() + 5 > 31 ? date.getMonth() + 1 : date.getMonth(),
     nextFiveDay
   );
 

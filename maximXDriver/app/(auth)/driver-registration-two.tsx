@@ -15,14 +15,20 @@ import {
 
 import CustomButton from "@/components/CustomButton";
 import * as FileSystem from "expo-file-system";
-import * as ImagePicker from "expo-image-picker";
+import {
+  ImagePickerOptions,
+  requestMediaLibraryPermissionsAsync,
+  launchImageLibraryAsync,
+  requestCameraPermissionsAsync,
+  launchCameraAsync,
 
+} from "expo-image-picker";
 
 import Ionicons from "@react-native-vector-icons/ionicons";
 import { router } from "expo-router";
 
 const imgDir =
-  FileSystem.documentDirectory + "images-" + new Date().getTime() + "/";
+  FileSystem.documentDirectory + "images/" ;
 
 const ensureDirExists = async () => {
   const dirInfo = await FileSystem.getInfoAsync(imgDir);
@@ -54,24 +60,23 @@ const DriverRegistrationTwo = () => {
 
   const selectImage = async (useLibrary: boolean) => {
     let result;
-    const options: ImagePicker.ImagePickerOptions = {
-      mediaTypes:["images"],
+    const options: ImagePickerOptions = {
+      mediaTypes: ["images"],
       allowsEditing: true,
       aspect: [16, 9],
       quality: 0.75,
     };
     if (useLibrary) {
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const { status } = await requestMediaLibraryPermissionsAsync();
       if (status !== "granted") {
         console.log("Permission to access media library was denied");
         return;
       }
-      result = await ImagePicker.launchImageLibraryAsync(options);
+      result = await launchImageLibraryAsync(options);
     } else {
-      await ImagePicker.requestCameraPermissionsAsync();
+      await requestCameraPermissionsAsync();
 
-      result = await ImagePicker.launchCameraAsync(options);
+      result = await launchCameraAsync(options);
     }
 
     if (!result.canceled) {

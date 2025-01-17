@@ -7,7 +7,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import {
+  GestureHandlerRootView,
+  NativeGesture,
+} from "react-native-gesture-handler";
 
 import BottomSheet, {
   BottomSheetScrollView,
@@ -15,29 +18,37 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet";
 import { OSMMapProps } from "@/types/type";
 import MapLibre from "./MapLibre";
-import { useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
+
+import MapBottomSheet, { BottomSheetRefProps } from "./MapBottomSheet";
 
 const RideLayout = ({
   children,
   location: { latitude, longitude, showEarlyMarker },
+  page,
+  handleChangePage,
 }: {
   children: React.ReactNode;
   location: OSMMapProps;
+  page: string;
+  handleChangePage: (page: string) => void;
 }) => {
-  const bottomSheetRef = useRef<BottomSheet>(null);
+  const bottomSheetRef = useRef<BottomSheetRefProps>(null);
+
+  useEffect(() => {
+    bottomSheetRef?.current?.scrollTo(-20);
+  }, []);
 
   return (
     <GestureHandlerRootView className="flex-1">
       <View className="flex-1 bg-white">
         <View className="flex h-screen  ">
           <View className="flex flex-row absolute z-10 top-16 items-center justify-start px-5">
-            <TouchableOpacity onPress={() => router.back()}>
+            <TouchableOpacity onPress={() => {}}>
               <View className="w-10 h-10 bg-white rounded-full items-center justify-center">
-                <Image
-                  source={icons.arrowBack}
-                  resizeMode="contain"
-                  className="w-6 h-6 ml-2"
-                />
+                <FontAwesome6 name="bars" size={6} iconStyle="solid" />
               </View>
             </TouchableOpacity>
           </View>
@@ -49,21 +60,14 @@ const RideLayout = ({
             }}
           />
         </View>
-        <BottomSheet
-          keyboardBehavior="extend"
+
+        <MapBottomSheet
+          page={page}
           ref={bottomSheetRef}
-          snapPoints={["55%", "80%"]}
-          index={0}
+          handleChangePage={handleChangePage}
         >
-          <BottomSheetView
-            style={{
-              flex: 1,
-              padding: 20,
-            }}
-          >
-            {children}
-          </BottomSheetView>
-        </BottomSheet>
+          {children}
+        </MapBottomSheet>
       </View>
     </GestureHandlerRootView>
   );

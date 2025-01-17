@@ -60,11 +60,11 @@ const Phone = () => {
         }}
       >
         <View className="flex flex-row absolute z-10 top-14 items-center justify-start px-5 ">
-          <TouchableOpacity onPress={() => router.back()}>
+          {/* <TouchableOpacity onPress={() => router.back()}>
             <View className="w-10 h-10 bg-white rounded-full border border-general-600 items-center justify-center">
               <Ionicons name="arrow-back" size={24} color={"#2E2D59"} />
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
 
         <View className="flex-1 items-center px-4 py-28 gap-5  bg-white">

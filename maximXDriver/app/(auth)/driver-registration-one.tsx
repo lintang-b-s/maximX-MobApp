@@ -1,23 +1,19 @@
 import { View, Text, KeyboardAvoidingView, Platform } from "react-native";
-import React, { useState } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Dropdown from "@/components/Dropdown";
 import { carColorIcons, carColors, carMakeDummy, carModels } from "@/constants";
-import DropdownBottomSheet from "@/components/DropdownBottomSheet";
+import DropdownBottomSheet, {
+  RefBottom,
+} from "@/components/DropdownBottomSheet";
 import InputField from "@/components/InputField";
 import CustomButton from "@/components/CustomButton";
 import { router } from "expo-router";
+import BottomSheet from "@gorhom/bottom-sheet";
+import { BottomSheetMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 
-const ShowDropDownBottomSheet = ({
-  dataOrigin,
-  data,
-  setData,
-  setState,
-  setShow,
-  dataIcon,
-  show,
-}: {
+declare interface ShowDropDownBottomSheetProps {
   dataOrigin: string[];
   data: string[];
   setData: (value: React.SetStateAction<string[]>) => void;
@@ -25,7 +21,13 @@ const ShowDropDownBottomSheet = ({
   setShow: () => void;
   dataIcon?: any;
   show: boolean;
-}) => {
+  ref: React.ForwardedRef<BottomSheetMethods>;
+}
+
+const ShowDropDownBottomSheet = forwardRef<
+  RefBottom,
+  ShowDropDownBottomSheetProps
+>(({ dataOrigin, setData, data, setState, setShow, dataIcon, show }, ref) => {
   const handleFilter = (searchTerm: string) => {
     if (searchTerm !== "") {
       setData(
@@ -46,15 +48,17 @@ const ShowDropDownBottomSheet = ({
       setShow={setShow}
       dataIcon={dataIcon}
       open={show}
+      ref={ref}
     />
   );
-};
+});
 
 const DriverRegistrationOne = () => {
   const { bottom, top } = useSafeAreaInsets();
   // car make
   const [make, setMake] = useState("Audi");
   const [carMakes, setCarMakes] = useState(carMakeDummy);
+  const bottomSheetRefMake = useRef<BottomSheet>(null);
 
   const [showType, setShowType] = useState("");
 
@@ -62,10 +66,12 @@ const DriverRegistrationOne = () => {
 
   const [model, setModel] = useState("Model 1");
   const [models, setModels] = useState(carModels);
+  const bottomSheetRefModel = useRef<BottomSheet>(null);
 
   // color
   const [color, setColor] = useState("white");
   const [colors, setColors] = useState(carColors);
+  const bottomSheetRefColor = useRef<BottomSheet>(null);
 
   // year
   const [year, setYear] = useState("2022");
@@ -85,6 +91,7 @@ const DriverRegistrationOne = () => {
               setShowType("");
             }}
             show={showType !== ""}
+            ref={bottomSheetRefMake}
           />
         );
       case "models":
@@ -98,6 +105,7 @@ const DriverRegistrationOne = () => {
               setShowType("");
             }}
             show={showType !== ""}
+            ref={bottomSheetRefModel}
           />
         );
       case "color":
@@ -112,6 +120,7 @@ const DriverRegistrationOne = () => {
             }}
             dataIcon={carColorIcons}
             show={showType !== ""}
+            ref={bottomSheetRefColor}
           />
         );
     }
@@ -141,9 +150,11 @@ const DriverRegistrationOne = () => {
             label="Make"
             setShow={() => {
               if (showType !== "make") {
+                bottomSheetRefMake.current?.collapse();
                 setShowType("make");
               } else {
                 setShowType("");
+                bottomSheetRefMake.current?.close();
               }
             }}
             placeholder={make}
@@ -152,9 +163,11 @@ const DriverRegistrationOne = () => {
             label="Model"
             setShow={() => {
               if (showType !== "models") {
+                bottomSheetRefModel.current?.collapse();
                 setShowType("models");
               } else {
                 setShowType("");
+                bottomSheetRefModel.current?.close();
               }
             }}
             placeholder={model}
@@ -176,9 +189,11 @@ const DriverRegistrationOne = () => {
                 label="Color"
                 setShow={() => {
                   if (showType !== "color") {
+                    bottomSheetRefColor.current?.collapse();
                     setShowType("color");
                   } else {
                     setShowType("");
+                    bottomSheetRefColor.current?.close();
                   }
                 }}
                 placeholder={color}
@@ -201,6 +216,15 @@ const DriverRegistrationOne = () => {
               year !== "" &&
               color !== "" &&
               plate !== ""
+            }
+            disabled={
+              !(
+                make !== "" &&
+                model !== "" &&
+                year !== "" &&
+                color !== "" &&
+                plate !== ""
+              )
             }
             onPress={() => {
               router.push("/(auth)/driver-registration-two");
