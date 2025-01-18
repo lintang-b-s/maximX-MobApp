@@ -18,6 +18,10 @@ const getBgVariantStyle = (variant: ButtonProps["bgVariant"]) => {
       return "bg-green-500";
     case "inactive":
       return "bg-general-600";
+    case "black":
+      return "bg-black";
+    case "white":
+      return "bg-white";
   }
 };
 
@@ -34,6 +38,10 @@ const getTextVariantStyle = (variant: ButtonProps["textVariant"]) => {
     case "inactive":
       return "text-general-500";
     case "tertiary":
+      return "text-black";
+    case "black":
+      return "text-white";
+    case "white":
       return "text-black";
   }
 };

@@ -10,6 +10,7 @@ import {
 import {
   GestureHandlerRootView,
   NativeGesture,
+  PanGesture,
 } from "react-native-gesture-handler";
 
 import BottomSheet, {
@@ -28,11 +29,16 @@ const RideLayout = ({
   children,
   location: { latitude, longitude, showEarlyMarker },
   page,
+  scroll,
+  handleSetScrollViewActive,
   handleChangePage,
 }: {
   children: React.ReactNode;
   location: OSMMapProps;
   page: string;
+  scroll: PanGesture;
+  handleSetScrollViewActive: (active: boolean) => void;
+
   handleChangePage: (page: string) => void;
 }) => {
   const bottomSheetRef = useRef<BottomSheetRefProps>(null);
@@ -65,6 +71,8 @@ const RideLayout = ({
           page={page}
           ref={bottomSheetRef}
           handleChangePage={handleChangePage}
+          scroll={scroll}
+          handleSetScrollViewActive={handleSetScrollViewActive}
         >
           {children}
         </MapBottomSheet>

@@ -22,7 +22,7 @@ const WeeklyChallenge = ({
     <View className=" items-center w-96 h-40 mr-10 px-4 py-4  border border-neutral-200 rounded-lg">
       <View className="flex flex-row items-center justify-between w-full">
         <View className="flex items-start ">
-          <Text className="text-general-500 text-base font-Roboto">
+          <Text className="text-general-500 text-base font-RobotoSemiBold">
             Ends on {days[itemData.endsOn.getDay()]}
           </Text>
           <Text className="font-RobotoBold text-lg ">

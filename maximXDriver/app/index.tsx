@@ -4,6 +4,8 @@ const Index = () => {
   return (
     <Redirect href={"/(auth)/phone"} />
     // <Redirect href={"/(root)/home"} />
+
+    
   );
 };
 

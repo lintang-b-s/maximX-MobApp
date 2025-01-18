@@ -1,24 +1,38 @@
-import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+  LayoutChangeEvent,
+  Dimensions,
+  Image,
+} from "react-native";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import RideLayout from "@/components/RideLayout";
 import { useLocationStore } from "@/store";
 import * as Location from "expo-location";
 import Loading from "@/components/Loading";
 import Ionicons from "@react-native-vector-icons/ionicons";
+import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 
 import {
+  icons,
+  months,
   slidesDataLearningHubs,
   slidesOportunities,
   SlidesWeeklyChallengeData,
+  todaysActivity,
+  weeklyActivity,
 } from "@/constants";
 import { BottomSheetRefProps } from "@/components/MapBottomSheet";
 import {
+  FlatList,
   Gesture,
   GestureDetector,
   ScrollView,
 } from "react-native-gesture-handler";
 
-import {
+import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -28,23 +42,73 @@ import Slider from "@/components/Slider";
 import WeeklyChallenge from "@/components/WeeklyChallenge";
 import Oportunity from "@/components/Oportunity";
 import LearningHub from "@/components/LearningHub";
+import CustomButton from "@/components/CustomButton";
+import { AnimatedCircularProgress } from "react-native-circular-progress";
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetScrollView,
+  BottomSheetView,
+} from "@gorhom/bottom-sheet";
+
+const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 const home = () => {
   const { userLatitude, userLongitude, setUserLocation, setSourceLocation } =
     useLocationStore();
 
-  const progress = useSharedValue<number>(0);
-
-  const ref = useRef<BottomSheetRefProps>(null);
-
   const [buttonLoading, setButtonLoading] = useState(false);
   const [buttonText, setButtonText] = useState("Go Online");
+  const [weeklySummaryIndex, setWeeklySummaryIndex] = useState(
+    weeklyActivity.length ? weeklyActivity.length - 1 : 0
+  );
 
   const [page, setPage] = useState("drive"); // drive or earnings
   const handleChangePage = (newPage: string) => {
     setPage(newPage);
   };
   const scale = useSharedValue(1);
+
+  const translateYScrollView = useSharedValue(0);
+  const contextScrollView = useSharedValue({ y: 0 });
+
+  const [showEditWeeklyEarnings, setShowEditWeeklyEarnings] = useState(false);
+
+  const [scrollViewHeight, setScrollViewHeight] = useState(0);
+  const [scrollViewActive, setScrollViewActive] = useState(true);
+  const [weeklyEarningGoal, setWeeklyEarningGoal] = useState(200);
+
+  const bottomSheetEditWeeklyRef = useRef<BottomSheet>(null);
+
+  const renderBackdrop = useCallback(
+    (props: any) => (
+      <BottomSheetBackdrop
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        {...props}
+      />
+    ),
+    []
+  );
+
+  const scrollGesture = Gesture.Pan()
+    .onStart(() => {
+      contextScrollView.value = { y: translateYScrollView.value };
+    })
+    .onUpdate((event) => {
+      translateYScrollView.value =
+        event.translationY + contextScrollView.value.y;
+      translateYScrollView.value = Math.max(
+        Math.min(translateYScrollView.value, 0),
+        -scrollViewHeight / 1.5
+      );
+    })
+    .enabled(scrollViewActive);
+
+  const rScrollViewStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: translateYScrollView.value }],
+    };
+  });
 
   const reanimatedGoButtonStyle = useAnimatedStyle(() => ({
     transform: [
@@ -73,6 +137,7 @@ const home = () => {
       setUserLocation({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
+
         address: `${address[0].formattedAddress!.split(",").slice(1, 3).join(", ")}`,
       });
     };
@@ -83,6 +148,12 @@ const home = () => {
   if (userLatitude == null) {
     return <Loading />;
   }
+
+  const onLayout = (event: LayoutChangeEvent) => {
+    "worklet";
+    const { x, y, height, width } = event.nativeEvent.layout;
+    setScrollViewHeight(height);
+  };
 
   const handlePressGoButton = () => {
     scale.value = withSpring(0.6, { duration: 1000 });
@@ -111,7 +182,158 @@ const home = () => {
     }
   };
 
-  const scroll1 = Gesture.Native();
+  const handleSetScrollViewActive = (active: boolean) => {
+    setScrollViewActive(active);
+  };
+
+  const renderActivityToday = () => {
+    if (todaysActivity.length !== 0) {
+      return (
+        <FlatList
+          data={todaysActivity.slice(0, 3)}
+          renderItem={({ item }) => {
+            return (
+              <View className="flex flex-row justify-between w-full py-2 px-3 gap-3">
+                <View className="flex flex-row items-start gap-4">
+                  <FontAwesome6
+                    name="taxi"
+                    size={18}
+                    color={"black"}
+                    iconStyle="solid"
+                  />
+                  <View className="flex gap-3">
+                    <Text className="font-RobotoBold text-lg ">
+                      {item.description}
+                    </Text>
+                    <Text className="text-general-500 text-base font-Roboto">
+                      {item.rideDateTime.toLocaleTimeString()}
+                    </Text>
+                  </View>
+                </View>
+                <Text className="font-RobotoBold text-lg tracking-wide ">
+                  ${item.fare}
+                </Text>
+              </View>
+            );
+          }}
+        />
+      );
+    } else {
+      return <View></View>;
+    }
+  };
+
+  const renderWeeklySummary = () => {
+    return (
+      <>
+        <View className="flex flex-row justify-between w-full">
+          <TouchableOpacity
+            onPress={() => {
+              if (weeklySummaryIndex - 1 >= 0) {
+                setWeeklySummaryIndex(weeklySummaryIndex - 1);
+              }
+            }}
+          >
+            <Ionicons name="chevron-back" size={18} />
+          </TouchableOpacity>
+          <Text className="text-lg font-RobotoBold tracking-wide">
+            {
+              months[
+                weeklyActivity[weeklySummaryIndex].startDate.getMonth() - 1
+              ]
+            }{" "}
+            {weeklyActivity[weeklySummaryIndex].startDate.getDate()} -{" "}
+            {months[weeklyActivity[weeklySummaryIndex].endDate.getMonth() - 1]}{" "}
+            {weeklyActivity[weeklySummaryIndex].endDate.getDate()}
+          </Text>
+          <TouchableOpacity
+            onPress={() => {
+              if (weeklySummaryIndex + 1 < weeklyActivity.length) {
+                setWeeklySummaryIndex(weeklySummaryIndex + 1);
+              }
+            }}
+          >
+            <Ionicons name="chevron-forward" size={18} />
+          </TouchableOpacity>
+        </View>
+
+        <View className=" flex flex-row  items-center  justify-between px-5 py-3  border border-neutral-200 rounded-lg mb-2">
+          <View className="gap-2 flex items-center">
+            <Text className="text-general-500 text-base font-Roboto">
+              Earnings
+            </Text>
+            <Text className="font-RobotoBold text-xl ">
+              ${weeklyActivity[weeklySummaryIndex].earnings}
+            </Text>
+          </View>
+          <View className="w-[2px] h-full bg-neutral-200" />
+
+          <View className="gap-2 flex items-center">
+            <Text className="text-general-500 text-base font-Roboto">
+              Online
+            </Text>
+            <Text className="font-RobotoBold text-xl ">
+              {
+                toHoursAndMinutes(
+                  weeklyActivity[weeklySummaryIndex].onlineMinutes
+                ).hours
+              }{" "}
+              hr{" "}
+              {
+                toHoursAndMinutes(
+                  weeklyActivity[weeklySummaryIndex].onlineMinutes
+                ).minutes
+              }{" "}
+              min
+            </Text>
+          </View>
+
+          <View className="w-[2px] h-full bg-neutral-200" />
+
+          <View className="gap-2 flex items-center">
+            <Text className="text-general-500 text-base font-Roboto">
+              Rides
+            </Text>
+            <Text className="font-RobotoBold text-xl ">
+              {weeklyActivity[weeklySummaryIndex].rides}
+            </Text>
+          </View>
+        </View>
+
+        <FlatList
+          data={weeklyActivity[weeklySummaryIndex].rideHistory.slice(0, 3)}
+          renderItem={({ item }) => {
+            return (
+              <View className="flex flex-row justify-between w-full py-2 px-3 gap-3">
+                <View className="flex flex-row items-start gap-4">
+                  <FontAwesome6
+                    name="taxi"
+                    size={18}
+                    color={"black"}
+                    iconStyle="solid"
+                  />
+                  <View className="flex gap-3">
+                    <Text className="font-RobotoBold text-lg ">
+                      {item.description}
+                    </Text>
+                    <Text className="text-general-500 text-base font-Roboto">
+                      {months[item.rideDateTime.getMonth()]}{" "}
+                      {item.rideDateTime.getDate()}{" "}
+                      {item.rideDateTime.toLocaleTimeString()}
+                    </Text>
+                  </View>
+                </View>
+                <Text className="font-RobotoBold text-lg tracking-wide ">
+                  ${item.fare}
+                </Text>
+              </View>
+            );
+          }}
+        />
+      </>
+    );
+  };
+
   return (
     <RideLayout
       location={{
@@ -120,29 +342,38 @@ const home = () => {
         showEarlyMarker: false,
       }}
       page={page}
+      scroll={scrollGesture}
       handleChangePage={handleChangePage}
+      handleSetScrollViewActive={handleSetScrollViewActive}
     >
-      <View className="flex-1">
-        <View className="absolute  left-[35%] top-[-104px]">
-          <View className="w-[135px]">
-            <GoButton
-              bgVariant={`${buttonText === "Go Online" ? "secondary" : "danger"}`}
-              textVariant={`secondary`}
-              active={true}
-              className="rounded-full"
-              style={[reanimatedGoButtonStyle]}
-              onPress={handlePressGoButton}
-            >
-              <Text className={`text-lg font-RobotoSemiBold text-white `}>
-                {ButtonChildren()}
-              </Text>
-            </GoButton>
-          </View>
+      <View className="absolute  left-[35%] top-[-104px]">
+        <View className="w-[135px]">
+          <GoButton
+            bgVariant={`${buttonText === "Go Online" ? "secondary" : "danger"}`}
+            textVariant={`secondary`}
+            active={true}
+            className="rounded-full"
+            style={[reanimatedGoButtonStyle]}
+            onPress={handlePressGoButton}
+          >
+            <Text className={`text-lg font-RobotoSemiBold text-white `}>
+              {ButtonChildren()}
+            </Text>
+          </GoButton>
         </View>
-        <GestureDetector gesture={scroll1}>
-          <ScrollView
-            contentContainerStyle={{ rowGap: 12, flex: 1 }}
-            className=" px-3 py-3   "
+      </View>
+
+      {page === "drive" ? (
+        <View
+          style={{
+            overflow: "hidden",
+            height: SCREEN_HEIGHT - 80,
+          }}
+          onLayout={onLayout}
+        >
+          <Animated.View
+            style={[rScrollViewStyle]}
+            className="flex-1 gap-3 px-3 py-3"
           >
             <View className=" flex flex-row  items-center  justify-between px-5 py-3  border border-neutral-200 rounded-lg">
               <View className="gap-2 flex items-center">
@@ -170,34 +401,311 @@ const home = () => {
               </View>
             </View>
 
-            <Text className="text-2xl font-RobotoBold">Weekly Challenges</Text>
+            <TouchableOpacity>
+              <View className="flex flex-row  items-center  justify-between px-5 py-3  border border-neutral-200 rounded-lg">
+                <View className="flex flex-row gap-4">
+                  <Ionicons name="settings-sharp" size={22} />
+                  <Text className="text-lg font-RobotoBold ">
+                    Driving Preferences
+                  </Text>
+                </View>
+                <Image source={icons.next} className="w-5 h-5" />
+              </View>
+            </TouchableOpacity>
+
+            <Text className="text-2xl font-RobotoBold tracking-wide	">
+              Weekly Challenges
+            </Text>
             <Slider
               items={SlidesWeeklyChallengeData}
-              children={WeeklyChallenge}
+              children={(itemData) => <WeeklyChallenge itemData={itemData} />}
             />
 
-            <Text className="text-2xl font-RobotoBold">
+            <Text className="text-2xl font-RobotoBold tracking-wide	">
               Opportunity for you
             </Text>
 
-            <Slider items={slidesOportunities} children={Oportunity} />
+            <Slider
+              items={slidesOportunities}
+              children={(itemData) => <Oportunity itemData={itemData} />}
+            />
 
-            <Text className="text-2xl font-RobotoBold">Learning Hub</Text>
+            <Text className="text-2xl font-RobotoBold tracking-wide	">
+              Learning Hub
+            </Text>
 
-            <Slider items={slidesDataLearningHubs} children={LearningHub} />
+            <Slider
+              items={slidesDataLearningHubs}
+              children={(itemData) => <LearningHub itemData={itemData} />}
+            />
 
-            <Text className="text-2xl font-RobotoBold">Help and support</Text>
+            <Text className="text-2xl font-RobotoBold tracking-wide	">
+              Help and support
+            </Text>
 
-            <View className="flex items-start px-2">
+            <View className="flex items-start px-2 mt-2">
               <View className="flex flex-row items-start gap-4">
                 <Ionicons name="help-circle" size={24} color={"black"} />
+                <View className="flex gap-1">
+                  <Text className="text-lg font-RobotoBold">
+                    Get your queries resolved
+                  </Text>
+                  <Text className="text-general-500 text-base font-Roboto">
+                    Call or chat with us at anytime and get your issues solved
+                    instantly.
+                  </Text>
+                </View>
+              </View>
+
+              <View className="flex flex-row items-start gap-4">
+                <Ionicons name="help-circle" size={24} color={"black"} />
+                <View className="flex gap-1">
+                  <Text className="text-lg font-RobotoBold">
+                    Setup an emergency contact
+                  </Text>
+                  <Text className="text-general-500 text-base font-Roboto">
+                    We;ll call them if an issue is reported and you don't
+                    respond.
+                  </Text>
+                </View>
               </View>
             </View>
-          </ScrollView>
-        </GestureDetector>
-      </View>
+          </Animated.View>
+        </View>
+      ) : (
+        <View
+          style={{
+            overflow: "hidden",
+            height: SCREEN_HEIGHT - 80,
+          }}
+          onLayout={onLayout}
+        >
+          <Animated.View
+            style={[rScrollViewStyle]}
+            className="flex-1 gap-3  py-3"
+          >
+            <View className=" flex  items-start gap-4 px-5 py-5 bg-[#ECF7EF]">
+              <Text className="text-lg font-RobotoSemiBold">Balance</Text>
+              <Text className=" font-RobotoBold text-3xl tracking-wider	">
+                $127.32
+              </Text>
+              <Text className="text-general-500 text-base font-Roboto">
+                Your payout is scheduled on Fri, 16th Mar
+              </Text>
+
+              <View className="flex flex-row gap-3">
+                <View className="w-40">
+                  <CustomButton
+                    title="Cash Out"
+                    bgVariant="black"
+                    textVariant="black"
+                    className="rounded-full"
+                    active={true}
+                  />
+                </View>
+                <View className="w-40">
+                  <CustomButton
+                    title="Details"
+                    bgVariant="white"
+                    textVariant="white"
+                    className="rounded-full"
+                    active={true}
+                  />
+                </View>
+              </View>
+            </View>
+
+            <View className="px-3 gap-3">
+              <Text className="text-2xl font-RobotoBold tracking-wide	">
+                Earning Goal
+              </Text>
+              <View className=" flex items-center w-full h-40  px-4 py-4  border border-neutral-200 rounded-lg self-center">
+                <View className="flex flex-row items-center justify-between w-full">
+                  <View className="flex items-start ">
+                    <Text className="text-general-500 text-base font-RobotoSemiBold">
+                      Ends on Monday
+                    </Text>
+                    <Text className="font-RobotoBold text-xl ">
+                      Weekly Goal: Earn $200/week
+                    </Text>
+                    <Text className="mt-2 text-general-200 text-base font-Roboto">
+                      $87 earned out of $200
+                    </Text>
+                  </View>
+                  <View className="mt-8">
+                    <AnimatedCircularProgress
+                      size={75}
+                      width={10}
+                      fill={(87 / weeklyEarningGoal) * 100}
+                      arcSweepAngle={200}
+                      rotation={260}
+                      tintColor="#0C973A"
+                      backgroundColor="#E5E5E5"
+                    >
+                      {(fill) => (
+                        <Text className="font-RobotoBold text-lg ">
+                          {Math.round((87 / weeklyEarningGoal) * 100)}%
+                        </Text>
+                      )}
+                    </AnimatedCircularProgress>
+                  </View>
+                </View>
+              </View>
+
+              <View className="w-64 self-center">
+                <CustomButton
+                  title="Edit my goal"
+                  IconLeft={() => (
+                    <Ionicons
+                      style={{ marginRight: 20 }}
+                      name="pencil"
+                      size={18}
+                    />
+                  )}
+                  active
+                  bgVariant="white"
+                  textVariant="white"
+                  onPress={() => {
+                    setShowEditWeeklyEarnings(true);
+                    bottomSheetEditWeeklyRef.current?.collapse();
+                    translateYScrollView.value = withSpring(
+                      -scrollViewHeight / 1.5
+                    );
+                  }}
+                  className="border border-neutral-200 rounded-full  "
+                />
+              </View>
+
+              <Text className="text-2xl font-RobotoBold tracking-wide	">
+                Today's Activity
+              </Text>
+              <View className=" flex flex-row  items-center  justify-between px-5 py-3  border border-neutral-200 rounded-lg mb-2">
+                <View className="gap-2 flex items-center">
+                  <Text className="text-general-500 text-base font-Roboto">
+                    Earnings
+                  </Text>
+                  <Text className="font-RobotoBold text-xl ">$12.2</Text>
+                </View>
+                <View className="w-[2px] h-full bg-neutral-200" />
+
+                <View className="gap-2 flex items-center">
+                  <Text className="text-general-500 text-base font-Roboto">
+                    Online
+                  </Text>
+                  <Text className="font-RobotoBold text-xl ">1hr 12 min</Text>
+                </View>
+
+                <View className="w-[2px] h-full bg-neutral-200" />
+
+                <View className="gap-2 flex items-center">
+                  <Text className="text-general-500 text-base font-Roboto">
+                    Rides
+                  </Text>
+                  <Text className="font-RobotoBold text-xl ">02</Text>
+                </View>
+              </View>
+              {renderActivityToday()}
+              <View className="w-[200px] self-center">
+                <CustomButton
+                  title="See all activity"
+                  IconRight={() => (
+                    <Ionicons
+                      name="arrow-forward-outline"
+                      style={{ marginLeft: 12 }}
+                      size={18}
+                    />
+                  )}
+                  active={true}
+                  bgVariant="white"
+                  textVariant="white"
+                  className="border rounded-full border-neutral-200 "
+                />
+              </View>
+              <Text className="text-2xl font-RobotoBold tracking-wide	">
+                Weekly Summary
+              </Text>
+              {renderWeeklySummary()}
+
+              <BottomSheet
+                keyboardBehavior="extend"
+                ref={bottomSheetEditWeeklyRef}
+                snapPoints={["20%", "24%"]}
+                index={showEditWeeklyEarnings ? 0 : -1}
+                enablePanDownToClose={true}
+                backdropComponent={renderBackdrop}
+              >
+                <BottomSheetView
+                  style={{
+                    flex: 1,
+                    padding: 20,
+                  }}
+                  className="bg-white"
+                >
+                  <BottomSheetScrollView className="flex-1 ">
+                    <View className="flex items-center gap-3 ">
+                      <Text className="font-RobotoBold text-xl ">
+                        Set a weekly earning goal
+                      </Text>
+                      <View className="flex flex-row gap-5 items-center">
+                        <TouchableOpacity
+                          onPress={() => {
+                            setWeeklyEarningGoal((prev) => prev - 50);
+                          }}
+                        >
+                          <View className="rounded-full border p-4 border-neutral-200">
+                            <FontAwesome6
+                              iconStyle="solid"
+                              name="minus"
+                              size={18}
+                            />
+                          </View>
+                        </TouchableOpacity>
+                        <Text className="font-RobotoBold text-2xl  ">
+                          ${weeklyEarningGoal}
+                        </Text>
+
+                        <TouchableOpacity
+                          onPress={() => {
+                            setWeeklyEarningGoal((prev) => prev + 50);
+                          }}
+                        >
+                          <View className="rounded-full border p-4 border-neutral-200">
+                            <FontAwesome6
+                              iconStyle="solid"
+                              name="plus"
+                              size={18}
+                            />
+                          </View>
+                        </TouchableOpacity>
+                      </View>
+
+                      <View className="w-40">
+                        <CustomButton
+                          active={true}
+                          title="done"
+                          className="rounded-full"
+                          onPress={() => {
+                            setShowEditWeeklyEarnings(false);
+                            bottomSheetEditWeeklyRef.current?.close();
+                          }}
+                        />
+                      </View>
+                    </View>
+                  </BottomSheetScrollView>
+                </BottomSheetView>
+              </BottomSheet>
+            </View>
+          </Animated.View>
+        </View>
+      )}
     </RideLayout>
   );
 };
+
+function toHoursAndMinutes(totalMinutes: number) {
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  return { hours, minutes };
+}
 
 export default home;

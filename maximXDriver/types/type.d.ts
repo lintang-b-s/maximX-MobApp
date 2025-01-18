@@ -42,7 +42,9 @@ declare interface ButtonProps extends TouchableOpacityProps {
     | "danger"
     | "success"
     | "inactive"
-    | "tertiary";
+    | "tertiary"
+    | "black"
+    | "white";
   textVariant?:
     | "primary"
     | "default"
@@ -50,7 +52,9 @@ declare interface ButtonProps extends TouchableOpacityProps {
     | "danger"
     | "success"
     | "inactive"
-    | "tertiary";
+    | "tertiary"
+    | "black"
+    | "white";
   IconLeft?: React.ComponentType<any>;
   IconRight?: React.ComponentType<any>;
   className?: string;
@@ -145,4 +149,19 @@ declare interface LocationStore {
     locationName: string;
     address: string;
   }) => void;
+}
+
+declare interface RideHistoryActivity {
+  description: string;
+  rideDateTime: Date;
+  fare: number;
+}
+
+declare interface WeeklySummary {
+  startDate: Date;
+  endDate: Date;
+  earnings: number;
+  onlineMinutes: number;
+  rides: number;
+  rideHistory: RideHistoryActivity[];
 }

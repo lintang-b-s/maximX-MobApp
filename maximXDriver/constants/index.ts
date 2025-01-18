@@ -8,6 +8,7 @@ import { SlidesDataOportunity } from "@/components/Oportunity";
 import { SlidesDataLearningHub } from "@/components/LearningHub";
 import uberDriverInCarOne from "@/assets/images/uber-driver-in-car-1.jpg";
 import dapatUangTip from "@/assets/images/dapat-uang-tip.jpg";
+import { RideHistoryActivity, WeeklySummary } from "@/types/type";
 
 export const images = {
   indonesianFlag,
@@ -178,4 +179,92 @@ export const slidesDataLearningHubs: SlidesDataLearningHub[] = [
     title: "Tips untuk mendapatkan uang tip banyak dari customers anda",
     image: images.dapatUangTip,
   },
+];
+
+export const todaysActivity: RideHistoryActivity[] = [
+  {
+    description: "Ride to West Field Cafe",
+    rideDateTime: new Date(2025, 1, 18, 12, 0),
+    fare: 2.35,
+  },
+
+  {
+    description: "Ride to East Field Cafe",
+    rideDateTime: new Date(2025, 1, 18, 13, 0),
+    fare: 3.35,
+  },
+  {
+    description: "Ride to Dike",
+    rideDateTime: new Date(2025, 1, 18, 14, 0),
+    fare: 5.35,
+  },
+];
+
+export const weeklyActivity: WeeklySummary[] = [
+  {
+    startDate: new Date(2025, 1, 7, 14, 0),
+    endDate: new Date(2025, 1, 14, 14, 0),
+    earnings: 52.32,
+    onlineMinutes: 120,
+    rides: 8,
+    rideHistory: [
+      {
+        description: "Ride to West Field Cafe",
+        rideDateTime: new Date(2025, 1, 7, 12, 0),
+        fare: 2.35,
+      },
+
+      {
+        description: "Ride to East Field Cafe",
+        rideDateTime: new Date(2025, 1, 10, 13, 0),
+        fare: 3.35,
+      },
+      {
+        description: "Ride to Dike",
+        rideDateTime: new Date(2025, 1, 11, 14, 0),
+        fare: 5.35,
+      },
+    ],
+  },
+
+  {
+    startDate: new Date(2025, 1, 18, 14, 0),
+    endDate: new Date(2025, 1, 25, 14, 0),
+    earnings: 52.32,
+    onlineMinutes: 120,
+    rides: 8,
+    rideHistory: [
+      {
+        description: "Ride to North Field Cafe",
+        rideDateTime: new Date(2025, 1, 18, 12, 0),
+        fare: 2.35,
+      },
+
+      {
+        description: "Ride to South Field Cafe",
+        rideDateTime: new Date(2025, 1, 19, 13, 0),
+        fare: 3.35,
+      },
+      {
+        description: "Ride to Mountain",
+        rideDateTime: new Date(2025, 1, 20, 14, 0),
+        fare: 5.35,
+      },
+    ],
+  },
+];
+
+export const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];

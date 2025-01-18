@@ -16,8 +16,10 @@ import {
   Gesture,
   GestureDetector,
   NativeGesture,
+  PanGesture,
 } from "react-native-gesture-handler";
 import Animated, {
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -58,6 +60,8 @@ const d = `${center} ${rect}`;
 type BottomSheetProps = {
   children?: React.ReactNode;
   page: string;
+  scroll: PanGesture;
+  handleSetScrollViewActive: (active: boolean) => void;
 
   handleChangePage: (page: string) => void;
 };
@@ -68,13 +72,22 @@ export type BottomSheetRefProps = {
 };
 
 const MapBottomSheet = forwardRef<BottomSheetRefProps, BottomSheetProps>(
-  ({ children, handleChangePage, page,  }, ref) => {
+  (
+    { children, handleChangePage, page, scroll, handleSetScrollViewActive },
+    ref
+  ) => {
     const translateY = useSharedValue(-20);
 
     const active = useSharedValue(false);
 
     const scrollTo = useCallback((destination: number) => {
       "worklet";
+
+      if (destination === MAX_TRANSLATE_Y) {
+        runOnJS(handleSetScrollViewActive)(true);
+      } else {
+        runOnJS(handleSetScrollViewActive)(false);
+      }
 
       active.value = destination !== 0;
       translateY.value = withSpring(destination, { damping: 50 });
@@ -101,13 +114,13 @@ const MapBottomSheet = forwardRef<BottomSheetRefProps, BottomSheetProps>(
       })
       .onEnd(() => {
         if (translateY.value > -SCREEN_HEIGHT / 3) {
-          scrollTo(-100);
+          scrollTo(-20);
         } else if (translateY.value < -SCREEN_HEIGHT / 2) {
           scrollTo(MAX_TRANSLATE_Y);
         }
       });
 
-    // scrollGesture.simultaneousWithExternalGesture(gesture);
+    const composed = Gesture.Simultaneous(gesture, scroll);
 
     const rBottomSheetStyle = useAnimatedStyle(() => {
       return {
@@ -116,7 +129,7 @@ const MapBottomSheet = forwardRef<BottomSheetRefProps, BottomSheetProps>(
     });
 
     return (
-      <GestureDetector gesture={gesture}>
+      <GestureDetector gesture={composed}>
         <Animated.View style={[styles.bottomSheetContainer, rBottomSheetStyle]}>
           <Svg
             style={{
@@ -141,7 +154,6 @@ const MapBottomSheet = forwardRef<BottomSheetRefProps, BottomSheetProps>(
           >
             <TouchableOpacity
               onPress={() => {
-                // setPage("drive");
                 if (translateY.value > -249) {
                   scrollTo(-250);
                 } else if (page == "drive") {
@@ -151,7 +163,11 @@ const MapBottomSheet = forwardRef<BottomSheetRefProps, BottomSheetProps>(
               }}
               style={{ alignItems: "flex-start", width: 150 }}
             >
-              <Image source={icons.steer} style={{ width: 34, height: 34 }} />
+              <Image
+                source={icons.steer}
+                style={{ width: 34, height: 34 }}
+                tintColor={page === "drive" ? "#0C973A" : "black"}
+              />
               <Text style={{ marginTop: 4, fontWeight: "600", fontSize: 16 }}>
                 Drive
               </Text>
@@ -164,12 +180,16 @@ const MapBottomSheet = forwardRef<BottomSheetRefProps, BottomSheetProps>(
                 } else if (page == "earnings") {
                   scrollTo(-20);
                 }
-                // setPage("earnings");
+
                 handleChangePage("earnings");
               }}
               style={{ alignItems: "flex-end", width: 150 }}
             >
-              <Image source={icons.paid} style={{ width: 34, height: 34 }} />
+              <Image
+                source={icons.paid}
+                style={{ width: 34, height: 34 }}
+                tintColor={page === "earnings" ? "#0C973A" : "black"}
+              />
               <Text style={{ marginTop: 4, fontWeight: "600", fontSize: 16 }}>
                 Earnings
               </Text>
@@ -187,6 +207,7 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT,
     width: "100%",
     backgroundColor: "white",
+    position: "relative",
   },
 });
 export default MapBottomSheet;
