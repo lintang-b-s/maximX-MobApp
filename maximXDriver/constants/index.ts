@@ -8,13 +8,23 @@ import { SlidesDataOportunity } from "@/components/Oportunity";
 import { SlidesDataLearningHub } from "@/components/LearningHub";
 import uberDriverInCarOne from "@/assets/images/uber-driver-in-car-1.jpg";
 import dapatUangTip from "@/assets/images/dapat-uang-tip.jpg";
-import { RideHistoryActivity, WeeklySummary } from "@/types/type";
+import {
+  RideHistoryActivity,
+  RideRequest,
+  Transaction,
+  WeeklySummary,
+} from "@/types/type";
+import mandiriBank from "@/assets/images/mandiri.png";
+import { TransactionStatus } from "@/types/enum";
+import riderPhoto from "@/assets/images/rider.jpg";
 
 export const images = {
   indonesianFlag,
   formChecklist,
   uberDriverInCarOne,
   dapatUangTip,
+  mandiriBank,
+  riderPhoto,
 };
 
 export const icons = {
@@ -138,19 +148,19 @@ export const KTP = [
 
 export const SlidesWeeklyChallengeData: SlidesDataWeeklyChallenge[] = [
   {
-    endsOn: new Date(2025, 1, 12),
+    endsOn: new Date(2025, 0, 12),
     item: 10,
     target: 20,
     extra: 35,
   },
   {
-    endsOn: new Date(2025, 1, 12),
+    endsOn: new Date(2025, 0, 12),
     item: 10,
     target: 30,
     extra: 50,
   },
   {
-    endsOn: new Date(2025, 1, 12),
+    endsOn: new Date(2025, 0, 12),
     item: 10,
     target: 50,
     extra: 70,
@@ -183,74 +193,119 @@ export const slidesDataLearningHubs: SlidesDataLearningHub[] = [
 
 export const todaysActivity: RideHistoryActivity[] = [
   {
-    description: "Ride to West Field Cafe",
-    rideDateTime: new Date(2025, 1, 18, 12, 0),
+    destination: "Ride to West Field Cafe",
+    rideDateTime: new Date(2025, 0, 18, 12, 0),
     fare: 2.35,
+    source: "New York",
   },
 
   {
-    description: "Ride to East Field Cafe",
-    rideDateTime: new Date(2025, 1, 18, 13, 0),
+    destination: "Ride to East Field Cafe",
+    rideDateTime: new Date(2025, 0, 18, 13, 0),
     fare: 3.35,
+    source: "New York",
   },
   {
-    description: "Ride to Dike",
-    rideDateTime: new Date(2025, 1, 18, 14, 0),
+    destination: "Ride to Dike",
+    rideDateTime: new Date(2025, 0, 18, 14, 0),
     fare: 5.35,
+    source: "New York",
   },
 ];
 
 export const weeklyActivity: WeeklySummary[] = [
   {
-    startDate: new Date(2025, 1, 7, 14, 0),
-    endDate: new Date(2025, 1, 14, 14, 0),
-    earnings: 52.32,
-    onlineMinutes: 120,
-    rides: 8,
+    startDate: new Date(2025, 0, 1, 14, 0),
+    endDate: new Date(2025, 0, 7, 14, 0),
+    earnings: 60.32,
+    onlineMinutes: 150,
+    rides: 11,
     rideHistory: [
       {
-        description: "Ride to West Field Cafe",
-        rideDateTime: new Date(2025, 1, 7, 12, 0),
+        destination: "Ride to West Field Cafe",
+        rideDateTime: new Date(2025, 0, 2, 12, 0),
         fare: 2.35,
+        source: "New York",
       },
 
       {
-        description: "Ride to East Field Cafe",
-        rideDateTime: new Date(2025, 1, 10, 13, 0),
+        destination: "Ride to East Field Cafe",
+        rideDateTime: new Date(2025, 0, 3, 13, 0),
         fare: 3.35,
+        source: "New York",
       },
       {
-        description: "Ride to Dike",
-        rideDateTime: new Date(2025, 1, 11, 14, 0),
+        destination: "Ride to Dike",
+        rideDateTime: new Date(2025, 0, 4, 14, 0),
         fare: 5.35,
+        source: "New York",
+      },
+    ],
+  },
+  {
+    startDate: new Date(2025, 0, 7, 14, 0),
+    endDate: new Date(2025, 0, 14, 14, 0),
+    earnings: 90.32,
+    onlineMinutes: 110,
+    rides: 12,
+    rideHistory: [
+      {
+        destination: "Ride to West Field Cafe",
+        rideDateTime: new Date(2025, 0, 7, 12, 0),
+        fare: 2.35,
+        source: "New York",
+      },
+
+      {
+        destination: "Ride to East Field Cafe",
+        rideDateTime: new Date(2025, 0, 10, 13, 0),
+        fare: 3.35,
+        source: "New York",
+      },
+      {
+        destination: "Ride to Dike",
+        rideDateTime: new Date(2025, 0, 11, 14, 0),
+        fare: 5.35,
+        source: "New York",
       },
     ],
   },
 
   {
-    startDate: new Date(2025, 1, 18, 14, 0),
-    endDate: new Date(2025, 1, 25, 14, 0),
+    startDate: new Date(2025, 0, 18, 14, 0),
+    endDate: new Date(2025, 0, 25, 14, 0),
     earnings: 52.32,
     onlineMinutes: 120,
     rides: 8,
     rideHistory: [
       {
-        description: "Ride to North Field Cafe",
-        rideDateTime: new Date(2025, 1, 18, 12, 0),
+        destination: "Ride to North Field Cafe",
+        rideDateTime: new Date(2025, 0, 18, 12, 0),
         fare: 2.35,
+        source: "New York",
       },
 
       {
-        description: "Ride to South Field Cafe",
-        rideDateTime: new Date(2025, 1, 19, 13, 0),
+        destination: "Ride to South Field Cafe",
+        rideDateTime: new Date(2025, 0, 19, 13, 0),
         fare: 3.35,
+        source: "New York",
       },
       {
-        description: "Ride to Mountain",
-        rideDateTime: new Date(2025, 1, 20, 14, 0),
+        destination: "Ride to Mountain",
+        rideDateTime: new Date(2025, 0, 20, 14, 0),
         fare: 5.35,
+        source: "New York",
       },
     ],
+  },
+  {
+    startDate: new Date(2025, 0, 25, 14, 0),
+    endDate: new Date(2025, 1, 1, 14, 0),
+    earnings: 0,
+    onlineMinutes: 0,
+    rides: 0,
+    rideHistory: [],
   },
 ];
 
@@ -268,3 +323,176 @@ export const months = [
   "November",
   "December",
 ];
+
+export const allTransactions: Transaction[] = [
+  {
+    date: new Date(2025, 0, 19, 12, 0, 0),
+    description: "Bank account ending **** 1234",
+    fare: -2,
+    type: TransactionStatus.WITHDRAWN,
+  },
+  {
+    date: new Date(2025, 0, 19, 11, 0, 0),
+    description: "Ride - 2.1km",
+    fare: 3.3,
+    type: TransactionStatus.RIDE,
+  },
+  {
+    date: new Date(2025, 0, 19, 10, 30, 0),
+    description: "Weekly Challenge Reward",
+    fare: 25,
+    type: TransactionStatus.WEEKLY_CHALLENGE_REWARD,
+  },
+  {
+    date: new Date(2025, 0, 19, 10, 0, 0),
+    description: "Ride 2.9km",
+    fare: 3.5,
+    type: TransactionStatus.RIDE,
+  },
+
+  {
+    date: new Date(2025, 0, 18, 12, 0, 0),
+    description: "Bank account ending **** 1234",
+    fare: -2,
+    type: TransactionStatus.WITHDRAWN,
+  },
+  {
+    date: new Date(2025, 0, 18, 11, 0, 0),
+    description: "Ride - 2.0km",
+    fare: 3.3,
+    type: TransactionStatus.RIDE,
+  },
+  {
+    date: new Date(2025, 0, 18, 10, 30, 0),
+    description: "Weekly Challenge Reward",
+    fare: 25,
+    type: TransactionStatus.WEEKLY_CHALLENGE_REWARD,
+  },
+  {
+    date: new Date(2025, 0, 18, 10, 0, 0),
+    description: "Ride 4.5km",
+    fare: 6.5,
+    type: TransactionStatus.RIDE,
+  },
+
+  {
+    date: new Date(2025, 0, 17, 12, 0, 0),
+    description: "Bank account ending **** 1234",
+    fare: -2,
+    type: TransactionStatus.WITHDRAWN,
+  },
+  {
+    date: new Date(2025, 0, 17, 11, 0, 0),
+    description: "Ride - 2.0km",
+    fare: 3.3,
+    type: TransactionStatus.RIDE,
+  },
+  {
+    date: new Date(2025, 0, 17, 10, 30, 0),
+    description: "Weekly Challenge Reward",
+    fare: 25,
+    type: TransactionStatus.WEEKLY_CHALLENGE_REWARD,
+  },
+  {
+    date: new Date(2025, 0, 17, 23, 0, 0),
+    description: "Ride 4.5km",
+    fare: 6.5,
+    type: TransactionStatus.RIDE,
+  },
+];
+
+export const allTransactionsDecember: Transaction[] = [
+  {
+    date: new Date(2024, 11, 19, 12, 0, 0),
+    description: "Bank account ending **** 1234",
+    fare: -2,
+    type: TransactionStatus.WITHDRAWN,
+  },
+  {
+    date: new Date(2024, 11, 19, 11, 0, 0),
+    description: "Ride - 2.1km",
+    fare: 3.3,
+    type: TransactionStatus.RIDE,
+  },
+  {
+    date: new Date(2024, 11, 19, 10, 30, 0),
+    description: "Weekly Challenge Reward",
+    fare: 25,
+    type: TransactionStatus.WEEKLY_CHALLENGE_REWARD,
+  },
+  {
+    date: new Date(2024, 11, 19, 10, 0, 0),
+    description: "Ride 2.9km",
+    fare: 3.5,
+    type: TransactionStatus.RIDE,
+  },
+
+  {
+    date: new Date(2024, 11, 18, 12, 0, 0),
+    description: "Bank account ending **** 1234",
+    fare: -2,
+    type: TransactionStatus.WITHDRAWN,
+  },
+  {
+    date: new Date(2024, 11, 18, 11, 0, 0),
+    description: "Ride - 2.0km",
+    fare: 3.3,
+    type: TransactionStatus.RIDE,
+  },
+  {
+    date: new Date(2024, 11, 18, 10, 30, 0),
+    description: "Weekly Challenge Reward",
+    fare: 25,
+    type: TransactionStatus.WEEKLY_CHALLENGE_REWARD,
+  },
+  {
+    date: new Date(2024, 11, 18, 10, 0, 0),
+    description: "Ride 4.5km",
+    fare: 6.5,
+    type: TransactionStatus.RIDE,
+  },
+
+  {
+    date: new Date(2024, 11, 17, 12, 0, 0),
+    description: "Bank account ending **** 1234",
+    fare: -2,
+    type: TransactionStatus.WITHDRAWN,
+  },
+  {
+    date: new Date(2024, 12, 17, 11, 0, 0),
+    description: "Ride - 2.0km",
+    fare: 3.3,
+    type: TransactionStatus.RIDE,
+  },
+  {
+    date: new Date(2024, 12, 17, 10, 30, 0),
+    description: "Weekly Challenge Reward",
+    fare: 25,
+    type: TransactionStatus.WEEKLY_CHALLENGE_REWARD,
+  },
+  {
+    date: new Date(2024, 12, 17, 23, 0, 0),
+    description: "Ride 4.5km",
+    fare: 6.5,
+    type: TransactionStatus.RIDE,
+  },
+];
+
+export const shortDayName = (date: Date, locale: string) =>
+  date.toLocaleDateString(locale, { weekday: "short" });
+
+export const rideRequestExample: RideRequest = {
+  destinationLatitude: -7.767863681312354,
+  destinationLongitude: 110.37689547399437,
+  destinationName: "DIKE UGM",
+  riderLocationName: "pogung",
+  riderLocationLatitude: -7.761428,
+  riderLocationLongitude: 110.376314,
+
+  riderRating: 4.4,
+  pickupETA: 4,
+  pickupDistance: 2,
+  routeETA: 12,
+  routeDistance: 5.5,
+  fare: 10,
+};

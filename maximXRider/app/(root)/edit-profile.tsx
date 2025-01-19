@@ -167,7 +167,7 @@ const EditProfile = () => {
               <Image source={icons.calendar} className="size-8" />
               <View className="flex items-start ">
                 <Text className="text-secondary-800 text-base font-RobotoLight">
-                  Datee of birth
+                  Date of birth
                 </Text>
                 <Text className="text-secondary-900 text-base font-Roboto">
                   {dob.toLocaleDateString()}

@@ -5,6 +5,7 @@ import {
   GestureResponderEvent,
 } from "react-native";
 import { MaskInputProps } from "react-native-mask-input";
+import { TransactionStatus } from "./enum";
 
 declare interface InputFieldProps extends TextInputProps {
   label: string;
@@ -152,9 +153,10 @@ declare interface LocationStore {
 }
 
 declare interface RideHistoryActivity {
-  description: string;
+  destination: string;
   rideDateTime: Date;
   fare: number;
+  source: string;
 }
 
 declare interface WeeklySummary {
@@ -164,4 +166,32 @@ declare interface WeeklySummary {
   onlineMinutes: number;
   rides: number;
   rideHistory: RideHistoryActivity[];
+}
+
+declare interface Transaction {
+  date: Date;
+  description: string;
+  fare: number;
+  type: TransactionStatus;
+}
+
+declare interface RideRequest {
+  destinationName: string;
+  destinationLatitude: number;
+  destinationLongitude: number;
+  riderLocationName: string;
+  riderLocationLatitude: number;
+  riderLocationLongitude: number;
+
+  riderRating: number;
+  pickupETA: number;
+  pickupDistance: number;
+  routeETA: number;
+  routeDistance: number;
+  fare: number;
+}
+
+declare interface RideRequestStore {
+  rideRequest: RideRequest;
+  setRideRequest: (rideRequest: RideRequest) => void;
 }

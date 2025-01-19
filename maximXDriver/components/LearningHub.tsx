@@ -22,7 +22,6 @@ const LearningHub = ({ itemData }: { itemData: SlidesDataLearningHub }) => {
         <Ionicons name="play" size={18} color="white" />
       </View>
     </View>
-    //   <Text>{itemData.title}</Text>
   );
 };
 

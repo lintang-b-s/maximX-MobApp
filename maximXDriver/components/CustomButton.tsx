@@ -1,6 +1,8 @@
 import { ButtonProps } from "@/types/type";
 import { TouchableOpacity, Text, TouchableHighlight } from "react-native";
 import Animated from "react-native-reanimated";
+import { LinearGradient } from "expo-linear-gradient";
+
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity); // Create Animated component
 
@@ -11,7 +13,7 @@ const getBgVariantStyle = (variant: ButtonProps["bgVariant"]) => {
     case "secondary":
       return "bg-general-200";
     case "tertiary":
-      return "bg-white";
+      return "";
     case "danger":
       return "bg-red-500";
     case "success":
@@ -38,7 +40,7 @@ const getTextVariantStyle = (variant: ButtonProps["textVariant"]) => {
     case "inactive":
       return "text-general-500";
     case "tertiary":
-      return "text-black";
+      return "text-white";
     case "black":
       return "text-white";
     case "white":
@@ -59,25 +61,55 @@ const CustomButton = ({
 
   ...props
 }: ButtonProps) => {
-  return (
-    <AnimatedTouchableOpacity
-      onPress={onPress}
-      style={style}
-      className={`my-2 w-full  p-4 flex flex-row justify-center
+  switch (bgVariant) {
+    case "tertiary":
+      return (
+        <AnimatedTouchableOpacity
+          onPress={onPress}
+          style={style}
+          className={`w-full
+                ${active ? getBgVariantStyle(bgVariant) : getBgVariantStyle("inactive")}  ${className?.includes("rounded") ? className : `rounded-lg ${className}`} `}
+          {...props}
+        >
+          <LinearGradient
+            colors={["#F64823", "#fc7b60"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            className=" w-full  p-4 flex flex-row justify-center  items-center"
+          >
+            {IconLeft && <IconLeft />}
+
+            <Text
+              className={`text-lg font-RobotoSemiBold ${active ? getTextVariantStyle(textVariant) : getTextVariantStyle("inactive")} `}
+            >
+              {title}
+            </Text>
+
+            {IconRight && <IconRight />}
+          </LinearGradient>
+        </AnimatedTouchableOpacity>
+      );
+    default:
+      return (
+        <AnimatedTouchableOpacity
+          onPress={onPress}
+          style={style}
+          className={`my-2 w-full  p-4 flex flex-row justify-center
                 items-center ${active ? getBgVariantStyle(bgVariant) : getBgVariantStyle("inactive")}  ${className?.includes("rounded") ? className : `rounded-lg ${className}`} `}
-      {...props}
-    >
-      {IconLeft && <IconLeft />}
+          {...props}
+        >
+          {IconLeft && <IconLeft />}
 
-      <Text
-        className={`text-lg font-RobotoSemiBold ${active ? getTextVariantStyle(textVariant) : getTextVariantStyle("inactive")} `}
-      >
-        {title}
-      </Text>
+          <Text
+            className={`text-lg font-RobotoSemiBold ${active ? getTextVariantStyle(textVariant) : getTextVariantStyle("inactive")} `}
+          >
+            {title}
+          </Text>
 
-      {IconRight && <IconRight />}
-    </AnimatedTouchableOpacity>
-  );
+          {IconRight && <IconRight />}
+        </AnimatedTouchableOpacity>
+      );
+  }
 };
 
 export default CustomButton;

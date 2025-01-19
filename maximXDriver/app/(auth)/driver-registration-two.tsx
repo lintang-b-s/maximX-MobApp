@@ -262,8 +262,8 @@ const DriverRegistrationTwo = () => {
             <CustomButton
               active={true}
               title="Re-upload"
-              bgVariant="tertiary"
-              textVariant="tertiary"
+              bgVariant="white"
+              textVariant="white"
               className="border border-gray-300"
               onPress={() => deleteImage(image)}
             />

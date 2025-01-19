@@ -1,0 +1,5 @@
+export const enum TransactionStatus {
+  RIDE = "RIDE",
+  WITHDRAWN = "WITHDRAWN",
+  WEEKLY_CHALLENGE_REWARD = "WEEKLY_CHALLENGE_REWARD",
+}

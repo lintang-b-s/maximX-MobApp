@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import RideLayout from "@/components/RideLayout";
-import { useLocationStore } from "@/store";
+import { useLocationStore, useRideRequestStore } from "@/store";
 import * as Location from "expo-location";
 import Loading from "@/components/Loading";
 import Ionicons from "@react-native-vector-icons/ionicons";
@@ -18,19 +18,15 @@ import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import {
   icons,
   months,
+  rideRequestExample,
   slidesDataLearningHubs,
   slidesOportunities,
   SlidesWeeklyChallengeData,
   todaysActivity,
   weeklyActivity,
 } from "@/constants";
-import { BottomSheetRefProps } from "@/components/MapBottomSheet";
-import {
-  FlatList,
-  Gesture,
-  GestureDetector,
-  ScrollView,
-} from "react-native-gesture-handler";
+
+import { FlatList, Gesture } from "react-native-gesture-handler";
 
 import Animated, {
   useAnimatedStyle,
@@ -49,6 +45,11 @@ import BottomSheet, {
   BottomSheetScrollView,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
+import { router } from "expo-router";
+import { toHoursAndMinutes } from "@/lib/utils";
+import { LinearProgress } from "@rneui/themed";
+import { RideRequest } from "@/types/type";
+import RideRequestPopUp from "@/components/RideRequest";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
@@ -61,6 +62,10 @@ const home = () => {
   const [weeklySummaryIndex, setWeeklySummaryIndex] = useState(
     weeklyActivity.length ? weeklyActivity.length - 1 : 0
   );
+
+  const { rideRequest, setRideRequest } = useRideRequestStore();
+
+  const [balance, setBalance] = useState(127);
 
   const [page, setPage] = useState("drive"); // drive or earnings
   const handleChangePage = (newPage: string) => {
@@ -191,6 +196,17 @@ const home = () => {
       return (
         <FlatList
           data={todaysActivity.slice(0, 3)}
+          ListEmptyComponent={
+            <View className=" flex  items-center  justify-between px-5 py-5 border border-neutral-200 rounded-lg mb-2">
+              <Text className="text-lg font-RobotoBold">
+                No activity this week
+              </Text>
+              <Text className="text-general-500 text-base font-Roboto">
+                You haven't done any rides today, go online and start taking
+                trips
+              </Text>
+            </View>
+          }
           renderItem={({ item }) => {
             return (
               <View className="flex flex-row justify-between w-full py-2 px-3 gap-3">
@@ -203,7 +219,7 @@ const home = () => {
                   />
                   <View className="flex gap-3">
                     <Text className="font-RobotoBold text-lg ">
-                      {item.description}
+                      {item.destination}
                     </Text>
                     <Text className="text-general-500 text-base font-Roboto">
                       {item.rideDateTime.toLocaleTimeString()}
@@ -218,8 +234,6 @@ const home = () => {
           }}
         />
       );
-    } else {
-      return <View></View>;
     }
   };
 
@@ -243,7 +257,7 @@ const home = () => {
               ]
             }{" "}
             {weeklyActivity[weeklySummaryIndex].startDate.getDate()} -{" "}
-            {months[weeklyActivity[weeklySummaryIndex].endDate.getMonth() - 1]}{" "}
+            {months[weeklyActivity[weeklySummaryIndex].endDate.getMonth()]}{" "}
             {weeklyActivity[weeklySummaryIndex].endDate.getDate()}
           </Text>
           <TouchableOpacity
@@ -256,7 +270,6 @@ const home = () => {
             <Ionicons name="chevron-forward" size={18} />
           </TouchableOpacity>
         </View>
-
         <View className=" flex flex-row  items-center  justify-between px-5 py-3  border border-neutral-200 rounded-lg mb-2">
           <View className="gap-2 flex items-center">
             <Text className="text-general-500 text-base font-Roboto">
@@ -302,6 +315,15 @@ const home = () => {
 
         <FlatList
           data={weeklyActivity[weeklySummaryIndex].rideHistory.slice(0, 3)}
+          ListEmptyComponent={
+            <View className=" flex  items-center  justify-between px-5 py-5 border border-neutral-200 rounded-lg mb-2">
+              <Text className="text-lg font-RobotoBold">No activity today</Text>
+              <Text className="text-general-500 text-base font-Roboto">
+                You haven't done any rides today, go online and start taking
+                trips
+              </Text>
+            </View>
+          }
           renderItem={({ item }) => {
             return (
               <View className="flex flex-row justify-between w-full py-2 px-3 gap-3">
@@ -314,7 +336,7 @@ const home = () => {
                   />
                   <View className="flex gap-3">
                     <Text className="font-RobotoBold text-lg ">
-                      {item.description}
+                      {item.destination}
                     </Text>
                     <Text className="text-general-500 text-base font-Roboto">
                       {months[item.rideDateTime.getMonth()]}{" "}
@@ -375,29 +397,58 @@ const home = () => {
             style={[rScrollViewStyle]}
             className="flex-1 gap-3 px-3 py-3"
           >
-            <View className=" flex flex-row  items-center  justify-between px-5 py-3  border border-neutral-200 rounded-lg">
-              <View className="gap-2 flex items-center">
-                <Text className="text-general-500 text-base font-Roboto">
-                  Earnings
-                </Text>
-                <Text className="font-RobotoBold text-xl ">$12.2</Text>
-              </View>
-              <View className="w-[2px] h-full bg-neutral-200" />
+            <View className="px-5 py-3  border border-neutral-200 rounded-lg flex gap-4">
+              {buttonText === "Go Offline" && (
+                <View className="flex gap-3 items-center mb-3">
+                  <CustomButton
+                    title="(dummy) dapat rider"
+                    active
+                    bgVariant="secondary"
+                    textVariant="secondary"
+                    onPress={() => {
+                      setRideRequest(rideRequestExample);
+                      router.push("/(root)/ride-request");
+                    }}
+                  />
+                  <Text className="font-RobotoBold text-xl">
+                    Finding ride requests
+                  </Text>
+                  <LinearProgress
+                    style={{
+                      width: "100%",
+                      height: 2.5,
+                      borderRadius: 100,
+                    }}
+                    color="#FD775D"
+                    animation={{ duration: 2000 }}
+                    trackColor="#FDEAE8"
+                  />
+                </View>
+              )}
+              <View className=" flex flex-row  items-center  justify-between ">
+                <View className="gap-2 flex items-center">
+                  <Text className="text-general-500 text-base font-Roboto">
+                    Earnings
+                  </Text>
+                  <Text className="font-RobotoBold text-xl ">$12.2</Text>
+                </View>
+                <View className="w-[2px] h-full bg-neutral-200" />
 
-              <View className="gap-2 flex items-center">
-                <Text className="text-general-500 text-base font-Roboto">
-                  Online
-                </Text>
-                <Text className="font-RobotoBold text-xl ">1hr 12 min</Text>
-              </View>
+                <View className="gap-2 flex items-center">
+                  <Text className="text-general-500 text-base font-Roboto">
+                    Online
+                  </Text>
+                  <Text className="font-RobotoBold text-xl ">1hr 12 min</Text>
+                </View>
 
-              <View className="w-[2px] h-full bg-neutral-200" />
+                <View className="w-[2px] h-full bg-neutral-200" />
 
-              <View className="gap-2 flex items-center">
-                <Text className="text-general-500 text-base font-Roboto">
-                  Rides
-                </Text>
-                <Text className="font-RobotoBold text-xl ">02</Text>
+                <View className="gap-2 flex items-center">
+                  <Text className="text-general-500 text-base font-Roboto">
+                    Rides
+                  </Text>
+                  <Text className="font-RobotoBold text-xl ">02</Text>
+                </View>
               </View>
             </View>
 
@@ -484,36 +535,69 @@ const home = () => {
             style={[rScrollViewStyle]}
             className="flex-1 gap-3  py-3"
           >
-            <View className=" flex  items-start gap-4 px-5 py-5 bg-[#ECF7EF]">
-              <Text className="text-lg font-RobotoSemiBold">Balance</Text>
-              <Text className=" font-RobotoBold text-3xl tracking-wider	">
-                $127.32
-              </Text>
-              <Text className="text-general-500 text-base font-Roboto">
-                Your payout is scheduled on Fri, 16th Mar
-              </Text>
+            {balance !== 0 ? (
+              <View className=" flex  items-start gap-4 px-5 py-5 bg-[#ECF7EF]">
+                <Text className="text-lg font-RobotoSemiBold">Balance</Text>
+                <Text className=" font-RobotoBold text-3xl tracking-wider	">
+                  ${balance}
+                </Text>
+                <Text className="text-general-500 text-base font-Roboto">
+                  Your payout is scheduled on Fri, 16th Mar
+                </Text>
 
-              <View className="flex flex-row gap-3">
-                <View className="w-40">
-                  <CustomButton
-                    title="Cash Out"
-                    bgVariant="black"
-                    textVariant="black"
-                    className="rounded-full"
-                    active={true}
-                  />
-                </View>
-                <View className="w-40">
-                  <CustomButton
-                    title="Details"
-                    bgVariant="white"
-                    textVariant="white"
-                    className="rounded-full"
-                    active={true}
-                  />
+                <View className="flex flex-row gap-3">
+                  <View className="w-40">
+                    <CustomButton
+                      title="Cash Out"
+                      bgVariant="black"
+                      textVariant="black"
+                      className="rounded-full"
+                      active={true}
+                      onPress={() => {
+                        router.push("/(root)/cash-out");
+                      }}
+                    />
+                  </View>
+                  <View className="w-40">
+                    <CustomButton
+                      title="Details"
+                      bgVariant="white"
+                      textVariant="white"
+                      className="rounded-full"
+                      active={true}
+                      onPress={() => {
+                        router.push("/(root)/balance-details");
+                      }}
+                    />
+                  </View>
                 </View>
               </View>
-            </View>
+            ) : (
+              <View className=" flex  items-start gap-4 px-5 py-5 bg-[#EFEEF2]">
+                <Text className="text-lg font-RobotoSemiBold">Balance</Text>
+                <Text className=" font-RobotoBold text-3xl tracking-wider	">
+                  ${balance}
+                </Text>
+                <Text className="text-general-500 text-base font-Roboto">
+                  Add the bank account where you want to receive payouts
+                </Text>
+
+                <View className="flex flex-row justify-start gap-3">
+                  <View className="w-40">
+                    <CustomButton
+                      title="Add Account"
+                      bgVariant="black"
+                      textVariant="black"
+                      className="rounded-full"
+                      active={true}
+                      onPress={() => {
+                        router.push("/(root)/add-a-bank-account");
+                      }}
+                    />
+                  </View>
+                </View>
+              </View>
+            )}
 
             <View className="px-3 gap-3">
               <Text className="text-2xl font-RobotoBold tracking-wide	">
@@ -526,10 +610,10 @@ const home = () => {
                       Ends on Monday
                     </Text>
                     <Text className="font-RobotoBold text-xl ">
-                      Weekly Goal: Earn $200/week
+                      Weekly Goal: Earn ${weeklyEarningGoal}/week
                     </Text>
                     <Text className="mt-2 text-general-200 text-base font-Roboto">
-                      $87 earned out of $200
+                      $87 earned out of ${weeklyEarningGoal}
                     </Text>
                   </View>
                   <View className="mt-8">
@@ -615,6 +699,9 @@ const home = () => {
                       size={18}
                     />
                   )}
+                  onPress={() => {
+                    router.push("/(root)/ride-activity");
+                  }}
                   active={true}
                   bgVariant="white"
                   textVariant="white"
@@ -701,11 +788,5 @@ const home = () => {
     </RideLayout>
   );
 };
-
-function toHoursAndMinutes(totalMinutes: number) {
-  const hours = Math.floor(totalMinutes / 60);
-  const minutes = totalMinutes % 60;
-  return { hours, minutes };
-}
 
 export default home;

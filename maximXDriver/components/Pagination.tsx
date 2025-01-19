@@ -1,8 +1,14 @@
 import { View, Text, StyleSheet, Animated, Dimensions } from "react-native";
 import React from "react";
-import { SlidesData } from "./Slider";
+import { ItemDataType } from "./Slider";
 
-const Pagination = ({ data, index }: { data: SlidesData[]; index: number }) => {
+const Pagination = ({
+  data,
+  index,
+}: {
+  data: ItemDataType[];
+  index: number;
+}) => {
   return (
     <View className=" flex flex-row w-full items-center justify-center">
       {data.map((_, idx) => {
